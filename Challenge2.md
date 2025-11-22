@@ -23,7 +23,7 @@ I go into Bookmarks, I see an input field, i try to input a basic payload, {{7*7
 <h3>We do a simple payload to make sure its jinja, And yes its jinja2 template.</h3>
 <h3>Ok, Now lets do A simple UNION injection followed up by our SSTI payload.</h3>
 <pre> ' UNION SELECT "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('strings *').read() }}" -- </pre> <br>
-<pre>https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/Python.md </pre>--> Pay load from here
+<pre>Payload From here --->: https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/Python.md </pre>
 <h3>I Just do Strings * and i search website for PCTF, saves the hassle ngl.</h3>
 
 And there it is the flag !
