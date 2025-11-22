@@ -10,6 +10,8 @@ Writeups for web-challenges Partriot-CTF
 <h4>It asks for a username and password, i just created a random get-go account and logged in, The first thing i see is 4 tabs on the top </h4>
 <img width="312" height="52" alt="image" src="https://github.com/user-attachments/assets/df9a14c6-ea35-4c40-ad51-4ce70c7b471e" />
 <img width="299" height="239" alt="image" src="https://github.com/user-attachments/assets/ea481d4c-22fc-4a9d-a0c9-59d837e0fff1" />
+<img width="298" height="114" alt="image" src="https://github.com/user-attachments/assets/05a674e7-00ec-4863-9b1f-ee195185cfdc" />
+
 <h3>Bookmarks, is where we actually are going to try and inject it.
 Audit, is just audit log of other guys ( we are not using it, i personally dont know why they even add this. );
 reports, useless.
