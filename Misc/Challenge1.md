@@ -17,7 +17,16 @@ At first, We are greeted by an upload page,I Checked the page source, and it doe
 
 ---
 
- I Tried to upload a PHP Shell and it said it got uploaded Successfully!
-<img width="380" height="185" alt="image" src="https://github.com/user-attachments/assets/eec01e40-edc0-469a-9e37-1f85669bfddf" />
+I Tried to upload a PHP Shell and it said it got uploaded Successfully! <br>
 
 We dont get information back other than its being stored, So what if we try to navigate to /Uploads/Filename ?
+
+And luckily it worked and now we have a shell on the server ! <br>
+
+| Uploaded  | File |
+| ------------- | ------------- |
+| <img width="380" height="185" alt="image" src="https://github.com/user-attachments/assets/eec01e40-edc0-469a-9e37-1f85669bfddf" />
+  | <img width="1919" height="1042" alt="image" src="https://github.com/user-attachments/assets/7f667e88-f38f-4b7d-89da-d662e96c6e80" />
+  |
+
+
