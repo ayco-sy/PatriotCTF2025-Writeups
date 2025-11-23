@@ -14,11 +14,11 @@ The moment we enter into the site, we are greeted by a login prompt with its end
 
 With the JSON content type, this suggests a NOSQLI injection.
 
-At first, i try to do basic injection into the password with username admin, So its something like this.
+At first, i try to do basic injection into the password with The username admin, So its something like this. <br>
 
-Username: admin
-Password: {"$ne": null} ---> This is always true, Its similar to 'or 1='1 in SQL injection.
-But, it doesnt seem to work, It suggests that it is getting sent as a String.
+Username: admin <br>
+Password: {"$ne": null} ---> This is always true, Its similar to 'or 1='1 in SQL injection. <br>
+But, it doesnt seem to work, It suggests that it is getting sent as a String. <br>
 
 <pre>Payload Reference: https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL%20Injection</pre>
 ---
