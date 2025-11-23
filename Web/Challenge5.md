@@ -9,7 +9,9 @@
 ---
 
 ### 1- Initial Login page:
-
+<br>
+<img width="667" height="860" alt="7" src="https://github.com/user-attachments/assets/265d5d49-43fa-4a4e-b337-d4a1e848bb8e" />
+<br>
 The moment we enter into the site, we are greeted by a login prompt with its endpoints.
 
 With the JSON content type, this suggests a NOSQLI injection.
