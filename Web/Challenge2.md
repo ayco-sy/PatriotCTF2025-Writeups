@@ -25,16 +25,19 @@ Only **Bookmarks** matters.
 ---
 
 ### Finding the SSTI Endpoint
-Adding a bookmark with `{{7*7}}` just gets reflected as plain text → not rendered.
+Adding a bookmark with '{{7*7}}' just gets reflected as plain text → not rendered.
 
 View page source on the Bookmarks tab → jackpot → /search:
 
-<img width="331" height="279" alt="2" src="https://github.com/user-attachments/assets/e0370a28-153c-4781-b92d-44393d1123fc" />
+
+<img width="331" height="279" alt="2" src="https://github.com/user-attachments/assets/e0370a28-153c-4781-b92d-44393d1123fc">
+
 
 <!-- Debug endpoint? -->
 <script src="/static/js/bookmarks.js"></script>
 <!-- Search bookmarks at /search -->
-```
+
+
 Visiting /search (full URL: http://18.212.136.134:5001/search) shows all our bookmarks and renders them as Jinja2 templates!
 The real rendering endpoint
 Test payload: "{{7*7}}' → returns 49 → confirmed Jinja2 SSTI!
