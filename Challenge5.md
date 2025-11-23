@@ -33,7 +33,7 @@ At first, i get Method not allowed, Which means, yo u are using a wrong HTTP Req
 ### 3- Initialization the attack
 
 Since now everything is working perfect, Now we need to add the Payload, Luckily he already gave us info
-<img width="570" height="154" alt="image" src="https://github.com/user-attachments/assets/02f7afdb-0a73-4099-ae0d-25765f629f5b" />
+<img width="570" height="154" alt="image" src="https://github.com/user-attachments/assets/02f7afdb-0a73-4099-ae0d-25765f629f5b" /> <br>
 Now lets try to do that with the first Payload But outside the quotes so it dont get treated as a string
 <img width="1919" height="549" alt="image" src="https://github.com/user-attachments/assets/bdd1ac05-e831-4e51-b4b5-33560d2b6883" />
 
