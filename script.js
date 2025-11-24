@@ -76,6 +76,14 @@ document.querySelectorAll('#challengeTabs .tab').forEach(tab => {
 // CTF Modal
 const ctfs = [
   { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
+  { name: "PatriotCTF 2025", link: "CTF/patriotctf2025.html", solves: "6+", status: "Currently Active", color: "var(--green)" },
   // Add more CTFs here
 ];
 
