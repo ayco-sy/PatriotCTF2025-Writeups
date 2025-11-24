@@ -21,12 +21,6 @@
     .solve-counter{font-size:3rem;font-weight:bold;color:var(--green);text-shadow:0 0 20px var(--green);animation:pulse 2s infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
     .bio{max-width:700px;margin:40px auto;text-align:center;opacity:0;transform:translateY(30px);transition:opacity 1s,transform 1s 0.3s}
-    .ctf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin:60px 0}
-    .ctf-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:30px;text-align:center;cursor:pointer;transition:.5s;position:relative;overflow:hidden}
-    .ctf-card:hover{transform:translateY(-15px);box-shadow:0 20px 50px rgba(88,166,255,.5);border-color:var(--accent)}
-    .ctf-card h2{margin:0 0 15px;color:var(--accent);font-size:1.8rem}
-    .ctf-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(88,166,255,.2),transparent);transition:.6s}
-    .ctf-card:hover::before{left:100%}
     .tabs{margin:50px 0;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
     .tab{padding:14px 28px;background:var(--card);border:2px solid var(--border);border-radius:50px;cursor:pointer;transition:.4s;font-weight:bold}
     .tab.active,.tab:hover{background:var(--accent);color:#000;border-color:var(--accent)}
@@ -39,7 +33,16 @@
     .category-tag{position:absolute;top:15px;right:15px;padding:6px 14px;background:rgba(0,0,0,0.7);border-radius:20px;font-size:0.8rem}
     .tag-misc{background:#3fb950;color:#000}.tag-web{background:#58a6ff;color:#000}.tag-pwn{background:#f85149;color:#fff}
     .tag-crypto{background:#ffa657;color:#000}.tag-forensics{background:#9c72ff;color:#fff}.tag-rev{background:#ff79c6;color:#000}
-    .toggle{position:absolute;top:30px;right:30px;background:var(--card);border:2px solid var(--border);padding:12px 18px;border-radius:50px;cursor:pointer;font-size:1.5rem;z-index:10}
+    .toggle,.ctf-toggle{position:absolute;top:30px;background:var(--card);border:2px solid var(--border);padding:12px 18px;border-radius:50px;cursor:pointer;font-size:1.5rem;z-index:10;transition:.3s}
+    .toggle{right:30px}
+    .ctf-toggle{right:140px}
+    .ctf-panel{position:fixed;top:0;right:-400px;width:380px;height:100%;background:var(--card);border-left:3px solid var(--accent);padding:100px 30px 30px;box-shadow:-20px 0 60px rgba(0,0,0,0.8);transition:right .6s cubic-bezier(0.22,1,0.36,1);z-index:999;overflow-y:auto}
+    .ctf-panel.open{right:0}
+    .ctf-panel h2{color:var(--accent);text-align:center;margin:0 0 40px;font-size:2.2rem}
+    .ctf-item{margin:30px 0;padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;cursor:pointer;transition:.4s;border:2px solid transparent}
+    .ctf-item:hover{border-color:var(--accent);transform:translateX(-10px);box-shadow:0 10px 30px rgba(88,166,255,.3)}
+    .ctf-item h3{margin:0 0 8px;color:var(--accent)}
+    .close-panel{position:absolute;top:30px;right:20px;font-size:2rem;cursor:pointer;opacity:0.7}
     footer{text-align:center;margin:100px 0 50px;opacity:0.6}
     .reveal{opacity:1!important;transform:translateY(0)!important}
   </style>
@@ -48,10 +51,11 @@
   <canvas id="matrix"></canvas>
   <div class="container">
     <div class="toggle" onclick="document.documentElement.classList.toggle('light');localStorage.theme=document.documentElement.classList.contains('light')?'light':'dark'">Theme</div>
+    <div class="ctf-toggle" onclick="document.getElementById('ctfPanel').classList.toggle('open')">CTFs</div>
     
     <header>
       <h1 id="glitch">Syndro</h1>
-      <div class="solve-counter" id="total-solves">0 SOLVED</div>
+      <div class="solve-counter" id="counter">2 SOLVED</div>
     </header>
 
     <div class="terminal" id="terminal">
@@ -69,25 +73,8 @@
          <a href="https://medium.com/@syndro" style="color:var(--accent)">Medium</a></p>
     </div>
 
-    <!-- CTF SELECTION GRID -->
-    <h2 style="text-align:center;color:var(--accent);font-size:2.5rem;margin:80px 0 40px">My CTFs</h2>
-    <div class="ctf-grid">
-      <div class="ctf-card" onclick="location.href='ctf/patriotctf2025.html'">
-        <h2>PatriotCTF 2025</h2>
-        <p>6 challenges solved • Web & Misc</p>
-        <p style="color:var(--green);font-weight:bold">Currently Active</p>
-      </div>
-      <!-- Add more CTFs here in the future -->
-      <!--
-      <div class="ctf-card" onclick="location.href='ctf/htb2025.html'">
-        <h2>HackTheBox CTF</h2>
-        <p>12 solved • Pwn & Crypto</p>
-      </div>
-      -->
-    </div>
-
-    <!-- CURRENT CTF CHALLENGES (PatriotCTF 2025) -->
-    <h2 style="text-align:center;color:var(--accent);font-size:2.5rem;margin:80px 0 40px">PatriotCTF 2025 Challenges</h2>
+    <!-- PatriotCTF 2025 Challenges -->
+    <h2 style="text-align:center;color:var(--accent);font-size:2.5rem;margin:80px 0 40px">PatriotCTF 2025</h2>
     <div class="tabs">
       <div class="tab active" data-cat="all">All</div>
       <div class="tab" data-cat="misc">Misc</div>
@@ -102,8 +89,26 @@
     <footer>syndro • Built with rage, RGB, and zero sleep</footer>
   </div>
 
+  <!-- SLIDING CTF PANEL -->
+  <div class="ctf-panel" id="ctfPanel">
+    <div class="close-panel" onclick="document.getElementById('ctfPanel').classList.remove('open')">×</div>
+    <h2>My CTFs</h2>
+    <div class="ctf-item" onclick="location.href='ctf/patriotctf2025.html'">
+      <h3>PatriotCTF 2025</h3>
+      <p>6+ solves • Web & Misc focus</p>
+      <p style="color:var(--green)">Currently Active</p>
+    </div>
+    <!-- Add more CTFs here in the future -->
+    <!--
+    <div class="ctf-item" onclick="location.href='ctf/htb.html'">
+      <h3>HackTheBox CTF</h3>
+      <p>12 solves • Pwn & Crypto</p>
+    </div>
+    -->
+  </div>
+
   <script>
-    // Matrix rain (unchanged)
+    // Matrix rain + animations (unchanged)
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -127,19 +132,17 @@
     setInterval(draw, 35);
     window.addEventListener('resize', () => {canvas.width = window.innerWidth; canvas.height = window.innerHeight});
 
-    // Animations
     setTimeout(() => document.getElementById('terminal').classList.add('reveal'), 800);
     setTimeout(() => document.querySelector('.bio').classList.add('reveal'), 2000);
     setTimeout(() => document.getElementById('cards').classList.add('reveal'), 2800);
 
-    // Challenges for PatriotCTF 2025
+    // Challenges
     const challenges = [
       {title:"Reverse Metadata Part 1",file:"Misc/Challenge1.html",flag:"PCTF{1_l0v3_unr3str1ct3d_f1l3_upl0ads}",type:"misc"},
       {title:"Reverse Metadata Part 2",file:"Misc/Challenge2.html",flag:"PCTF{l0gs_4r3_4_tr34sur3_tr0v3}",type:"misc"},
-      // Add more here
     ];
 
-    document.getElementById("total-solves").textContent = challenges.length + " SOLVED";
+    document.getElementById("counter").textContent = challenges.length + " SOLVED";
 
     const container = document.getElementById("cards");
     const tabs = document.querySelectorAll(".tab");
