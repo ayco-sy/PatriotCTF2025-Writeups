@@ -1,53 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  // Apply saved theme on EVERY page
+  if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+    document.documentElement.classList.add("light");
+  } else {
+    document.documentElement.classList.remove("light");
+  }
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>syndro | CTF Writeups</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <canvas id="matrix"></canvas>
-
   <div class="container">
-    <!-- Top Buttons -->
-    <button class="top-btn" id="themeToggle">Theme</button>
-    <button class="top-btn ctf-btn" id="ctfToggle">CTFs</button>
-
-    <!-- Header -->
+    <div class="toggle" id="themeToggle">Theme</div>
+    <div class="ctf-toggle" id="ctfToggle">CTFs</div>
     <header>
-      <h1 class="glitch" data-text="SYNDRO">SYNDRO</h1>
+      <h1 id="glitch">Syndro</h1>
       <div class="solve-counter" id="solveCounter">0 SOLVED</div>
     </header>
-
-    <!-- Terminal Bio -->
     <div class="terminal" id="terminal">
       <div>$ whoami</div>
-      <div>syndro</div>
+      <div>Syndro</div>
       <div>$ cat bio.txt</div>
       <div class="typing">CTF player • Web & Misc destroyer • PHP shell enthusiast • Student at AOU</div>
     </div>
-
     <div class="bio">
       <p>Trying my best in every CTF. Every flag is a story. Every writeup is a war crime against the challenge author.</p>
       <p>
-        <a href="https://github.com/syndro-1" target="_blank">GitHub</a> •
+        <a href="https://github.com/ayco-sy" target="_blank">GitHub</a> •
         <a href="https://x.com/Syndro_1" target="_blank">X/Twitter</a> •
         <a href="https://discordapp.com/users/313717103150759950" target="_blank">Discord</a> •
         <a href="https://medium.com/@syndro" target="_blank">Medium</a>
       </p>
     </div>
-
-    <h2 class="section-title">Writeups</h2>
-
-    <!-- SEARCH BAR (BEAUTIFUL & WORKING) -->
-    <div class="search-wrapper">
-      <input type="text" id="searchInput" placeholder="Search by title or flag..." autocomplete="off">
-      <div class="search-icon">Search</div>
-    </div>
-
-    <!-- Tabs -->
+    <h2 class="section-title">Write ups!</h2>
     <div class="tabs" id="challengeTabs">
       <div class="tab active" data-cat="all">All</div>
       <div class="tab" data-cat="misc">Misc</div>
@@ -56,24 +48,16 @@
       <div class="tab" data-cat="pwn">Pwn</div>
       <div class="tab" data-cat="forensics">Forensics</div>
     </div>
-
-    <!-- Challenge Cards -->
     <div class="cards" id="challengeCards"></div>
-
-    <!-- Empty State -->
-    <div class="empty-state" id="emptyState">
-      <h3>No challenges found</h3>
-      <p>Try another search term or category</p>
-    </div>
-
-    <footer>syndro • Built with rage, RGB, and zero sleep</footer>
+    <footer>syndro • Built with rage, RGB, and zero sleep ( actually zero sleep 😟 )</footer>
   </div>
-
-  <!-- CTF Modal -->
-  <div class="modal" id="ctfModal">
+  <!-- CTF MODAL -->
+  <div class="modal-overlay" id="ctfModal">
     <div class="modal-content">
-      <span class="close">×</span>
-      <h2>My CTFs</h2>
+      <div class="modal-header">
+        <h2>My CTFs</h2>
+        <div class="close-modal">×</div>
+      </div>
       <div class="ctf-grid" id="ctfGrid"></div>
     </div>
   </div>
