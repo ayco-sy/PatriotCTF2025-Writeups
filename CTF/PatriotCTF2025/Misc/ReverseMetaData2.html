@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  // Apply saved theme on EVERY page
+  if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+    document.documentElement.classList.add("light");
+  } else {
+    document.documentElement.classList.remove("light");
+  }
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Challenge 2: Reverse Metadata Part 2 • PatriotCTF 2025</title>
