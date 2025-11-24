@@ -1,10 +1,10 @@
-// Matrix Rain
+// Matrix Rain (unchanged)
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth; canvas.height = window.innerHeight;
 const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
 const fontSize = 14;
-const columns = canvas.width / fontSize;
+let columns = canvas.width / fontSize;
 const drops = Array(Math.floor(columns)).fill(1);
 
 function draw() {
@@ -21,51 +21,39 @@ function draw() {
 }
 setInterval(draw, 35);
 window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columns = canvas.width / fontSize;
 });
 
 // Animations
-setTimeout(() => document.getElementById('terminal').classList.add('reveal'), 800);
-setTimeout(() => document.querySelector('.bio').classList.add('reveal'), 2000);
-setTimeout(() => document.getElementById('challengeCards').classList.add('reveal'), 2800);
+setTimeout(() => document.getElementById('terminal')?.classList.add('reveal'), 800);
+setTimeout(() => document.querySelector('.bio')?.classList.add('reveal'), 2000);
+setTimeout(() => document.getElementById('challengeCards')?.classList.add('reveal'), 2800);
 
 // Theme Toggle
-document.getElementById('themeToggle').addEventListener('click', () => {
+document.getElementById('themeToggle')?.addEventListener('click', () => {
   document.documentElement.classList.toggle('light');
   localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
 });
 
-// Load theme
-if (localStorage.theme === 'light' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: light)').matches))
+// Load saved theme
+if (localStorage.theme === 'light' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
   document.documentElement.classList.add('light');
+}
 
-// Challenges
+// === CHALLENGES ===
 const challenges = [
   // Misc
-  
-  {title:"Reverse Metadata Part 1",file:"CTF/patriotCTF2025/Misc/ReverseMetaData1.html",flag:"MASONCC{images_****}",type:"misc"},
-  {title:"Reverse Metadata Part 2",file:"CTF/patriotCTF2025/Misc/ReverseMetaData2.html",flag:"PCTF{hidden_****}",type:"misc"},
-
+  {title:"Reverse Metadata Part 1", file:"CTF/patriotCTF2025/Misc/ReverseMetaData1.html", flag:"MASONCC{images_****}", type:"misc"},
+  {title:"Reverse Metadata Part 2", file:"CTF/patriotCTF2025/Misc/ReverseMetaData2.html", flag:"PCTF{hidden_****}", type:"misc"},
 
   // Web
-
-   {title:"Reverse Metadata Part 1",file:"CTF/PatriotCTF2025/Web/ConnectionTester.html",flag:"PCTF{C0nnection_****}",type:"web"},
-   {title:"Reverse Metadata Part 1",file:"CTF/PatriotCTF2025/Web/FeedbackFallout.html",flag:"{SQLI_****}",type:"web"},
-   {title:"Reverse Metadata Part 1",file:"CTF/PatriotCTF2025/Web/SecureAuth.html",flag:"PCTF{cant_****}",type:"web"},
-   {title:"Reverse Metadata Part 1",file:"CTF/PatriotCTF2025/Web/TrustFall.html",flag:"PCTF{auth_****}",type:"web"},
-   {title:"Reverse Metadata Part 1",file:"CTF/PatriotCTF2025/Web/TrustVault.html",flag:"FLAG{py7h0n_****}",type:"web"},
-
-  // Crypto
-
-
-
-
-  // Pwn
-
-
-
-
- // Forensics
+  {title:"Connection Tester", file:"CTF/PatriotCTF2025/Web/ConnectionTester.html", flag:"PCTF{C0nnection_****}", type:"web"},
+  {title:"Feedback Fallout", file:"CTF/PatriotCTF2025/Web/FeedbackFallout.html", flag:"PCTF{SQLI_****}", type:"web"},
+  {title:"Secure Auth", file:"CTF/PatriotCTF2025/Web/SecureAuth.html", flag:"PCTF{cant_****}", type:"web"},
+  {title:"Trust Fall", file:"CTF/PatriotCTF2025/Web/TrustFall.html", flag:"PCTF{auth_****}", type:"web"},
+  {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault.html", flag:"FLAG{py7h0n_****}", type:"web"},
 ];
 
 document.getElementById("solveCounter").textContent = challenges.length + " SOLVED";
@@ -81,13 +69,14 @@ function renderChallenges(filter = "all") {
       <div class="category-tag tag-${c.type}">${c.type.toUpperCase()}</div>
       <h3>${c.title}</h3>
       <p class="flag">Flag: <code>${c.flag}</code></p>
-      <span style="opacity:0.7">Click for writeup</sapan>
+      <span style="opacity:0.7">Click for writeup</span>
     `;
     card.onclick = () => location.href = c.file;
     container.appendChild(card);
   });
 }
 
+// Tabs
 document.querySelectorAll('#challengeTabs .tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('#challengeTabs .tab').forEach(t => t.classList.remove('active'));
@@ -96,11 +85,16 @@ document.querySelectorAll('#challengeTabs .tab').forEach(tab => {
   });
 });
 
-// CTF Modal
-const ctfs = [  { name: "PatriotCTF 2025", link: "CTF/PatriotCTF2025/patriotctf2025.html", solves: "6+", status: "Ended", color: "var(--gray)" },  // Add more CTFs here];
+// === CTF MODAL — FIXED & SIMPLIFIED ===
+const ctfs = [
+  { name: "PatriotCTF 2025", link: "CTF/PatriotCTF2025/patriotctf2025.html", solves: "7+", status: "Ended", color: "#8b949e" },
+  // Add more CTFs here later
+];
 
 function renderCTFs() {
-  document.getElementById("ctfGrid").innerHTML = ctfs.map(ctf => `
+  const grid = document.getElementById("ctfGrid");
+  if (!grid) return;
+  grid.innerHTML = ctfs.map(ctf => `
     <div class="ctf-card" onclick="location.href='${ctf.link}'">
       <h3>${ctf.name}</h3>
       <p>${ctf.solves} solves</p>
@@ -110,16 +104,20 @@ function renderCTFs() {
 }
 renderCTFs();
 
-document.getElementById('ctfToggle').addEventListener('click', () => {
-  document.getElementById('ctfModal').classList.add('open');
+// Open modal
+document.getElementById('ctfToggle')?.addEventListener('click', () => {
+  document.getElementById('ctfModal')?.classList.add('open');
 });
-document.querySelector('.close-modal').addEventListener('click', () => {
-  document.getElementById('ctfModal').classList.remove('open');
+
+// Close modal — works on X button OR clicking outside
+document.querySelector('.close-modal')?.addEventListener('click', () => {
+  document.getElementById('ctfModal')?.classList.remove('open');
 });
-document.getElementById('ctfModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('ctfModal')) {
-    document.getElementById('ctfModal').classList.remove('open');
+document.getElementById('ctfModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'ctfModal') {
+    e.target.classList.remove('open');
   }
 });
 
+// Initial render
 renderChallenges();
