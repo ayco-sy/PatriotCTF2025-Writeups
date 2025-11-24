@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-  // Apply saved theme on EVERY page
-  if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
-    document.documentElement.classList.add("light");
-  } else {
-    document.documentElement.classList.remove("light");
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reverse Metadata Part 1 • PatriotCTF 2025</title>
+
+  <!-- GLOBAL THEME PERSISTENCE — FIXED & BULLETPROOF -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (saved === 'light' || (!saved && prefersLight)) {
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+      }
+    })();
+  </script>
+
   <link rel="stylesheet" href="../../style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
+    :root { --accent: #58a6ff; --green: #3fb950; }
+    .light { --accent: #1f6feb; --green: #238636; }
+
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #e6edf3;
+      min-height: 100vh;
+      margin: 0;
+      transition: background 0.5s ease;
+    }
+    .light body { background: #f6f8fa; color: #0d1117; }
+
     .writeup {
       max-width: 1100px;
       margin: 60px auto;
       padding: 60px;
+      background: rgba(13,17,23,0.96);
+      backdrop-filter: blur(12px);
       border-radius: 24px;
+      border: 2px solid rgba(88,166,255,0.2);
       box-shadow: 0 30px 100px rgba(0,0,0,0.7);
       position: relative;
     }
+    .light .writeup { background: rgba(255,255,255,0.96); border-color: rgba(88,166,255,0.15); }
+
     .writeup::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
       background: linear-gradient(90deg, #58a6ff, #8b5cf6, #f472b6);
@@ -28,12 +55,12 @@
 
     .back-btn {
       position: fixed; top: 30px; left: 30px; z-index: 100;
-      background: #58a6ff; color: #000; padding: 16px 40px; border-radius: 50px;
+      background: var(--accent); color: #000; padding: 16px 40px; border-radius: 50px;
       font-weight: bold; text-decoration: none; box-shadow: 0 10px 30px rgba(88,166,255,0.5);
       transition: all .3s;
     }
     .back-btn:hover { transform: translateY(-5px); }
-    .light .back-btn { background: #1f6feb; color: white; }
+    .light .back-btn { color: white; }
 
     .title h1 {
       font-family: 'Orbitron', sans-serif;
@@ -44,16 +71,12 @@
       -webkit-text-fill-color: transparent;
       margin: 0;
     }
-    .title small { display: block; text-align: center; font-size: 2rem; color: #8b949e; margin-top: 12px; }
-    .light .title small { color: #57606a; }
 
-    .meta { text-align: center; margin: 30px 0 50px; color: #8b949e; font-size: 1.1rem; }
-    .light .meta { color: #57606a; }
+    .title small, .meta, .footer-note, .image-item p { color: #8b949e; }
+    .light .title small, .light .meta, .light .footer-note, .light .image-item p { color: #57606a; }
 
-    h2 { color: #58a6ff; font-size: 2.4rem; margin: 70px 0 25px; padding-bottom: 12px; border-bottom: 3px solid #58a6ff; }
-    .light h2 { color: #1f6feb; border-bottom-color: #1f6feb; }
+    h2 { color: var(--accent); border-bottom: 3px solid var(--accent); padding-bottom: 12px; margin: 70px 0 25px; font-size: 2.4rem; }
 
-    /* PERFECT CODE BLOCKS - TEXT NOW VISIBLE */
     pre {
       background: #0d1117 !important;
       color: #f0f6fc !important;
@@ -62,26 +85,11 @@
       border: 2px solid #30363d;
       margin: 40px 0;
       font-size: 1.15rem;
-      line-height: 1.6;
       overflow-x: auto;
     }
-    pre code {
-      color: #f0f6fc !important;
-      font-family: 'Roboto Mono', monospace;
-    }
-    .light pre {
-      background: #f6f8fa !important;
-      color: #24292f !important;
-      border-color: #d0d7de;
-    }
+    .light pre { background: #f6f8fa !important; color: #24292f !important; border-color: #d0d7de; }
 
-    /* IMAGES: AUTO-ADJUST + NO HUGE PADDING */
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-      gap: 40px;
-      margin: 50px 0;
-    }
+    .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 40px; margin: 50px 0; }
     .image-item {
       background: rgba(13,17,23,0.9);
       border-radius: 20px;
@@ -91,22 +99,16 @@
       transition: all .4s;
       cursor: zoom-in;
     }
-    .image-item:hover {
-      transform: translateY(-12px);
-      border-color: #58a6ff;
-      box-shadow: 0 30px 80px rgba(88,166,255,0.3);
-    }
     .light .image-item { background: white; }
-
+    .image-item:hover { transform: translateY(-12px); border-color: var(--accent); }
     .image-item img {
       width: 100%;
       height: auto;
-      max-height: 500px;
+      max-height: 520px;
       object-fit: contain;
-      background: transparent;   /* No black padding! */
+      background: transparent;
       display: block;
     }
-
     .image-item p {
       padding: 16px 20px;
       text-align: center;
@@ -114,75 +116,38 @@
       font-style: italic;
       font-size: 0.95rem;
       background: rgba(13,17,23,0.95);
-      color: #8b949e;
     }
-    .light .image-item p { background: #f6f8fa; color: #57606a; }
+    .light .image-item p { background: #f6f8fa; }
 
     .flag-box {
       background: rgba(59,249,80,0.15);
-      border: 3px solid #3fb950;
+      border: 3px solid var(--green);
       border-radius: 24px;
       padding: 40px;
       text-align: center;
       margin: 70px 0;
       box-shadow: 0 0 60px rgba(59,249,80,0.3);
     }
-    .flag { font-size: 2.4rem; font-weight: bold; color: #3fb950; text-shadow: 0 0 30px #3fb950; letter-spacing: 2px; font-family: 'Roboto Mono', monospace; }
+    .flag { font-size: 2.4rem; color: var(--green); text-shadow: 0 0 30px var(--green); letter-spacing: 2px; font-family: 'Roboto Mono', monospace; }
 
-    .footer-note { text-align: center; margin-top: 120px; color: #8b949e; font-size: 0.95rem; }
-    .footer-note a { color: #58a6ff; text-decoration: none; }
-    .footer-note a:hover { text-decoration: underline; }
-    .light .footer-note a { color: #1f6feb; }
-
-    /* FULLSCREEN MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.98);
-      backdrop-filter: blur(12px);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+    .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 20px; }
     .modal.active { display: flex; }
-    .modal img {
-      max-width: 95%;
-      max-height: 95vh;
-      border-radius: 16px;
-      box-shadow: 0 0 100px rgba(88,166,255,0.6);
-    }
-    .close-modal {
-      position: absolute;
-      top: 30px; right: 40px;
-      font-size: 3.5rem;
-      color: white;
-      cursor: pointer;
-      background: rgba(255,255,255,0.1);
-      width: 70px; height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
-    }
+    .modal img { max-width: 95%; max-height: 95vh; border-radius: 16px; box-shadow: 0 0 100px rgba(88,166,255,0.6); }
+    .close-modal { position: absolute; top: 30px; right: 40px; font-size: 3.5rem; color: white; cursor: pointer; background: rgba(255,255,255,0.1); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     .close-modal:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
     @media (max-width: 768px) {
       .writeup { margin: 20px; padding: 40px; }
       .title h1 { font-size: 3rem; }
       .image-grid { grid-template-columns: 1fr; }
-      .image-item img { max-height: 400px; }
+      .image-item img { max-height: 420px; }
       .back-btn { position: static; display: block; margin: 30px auto; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <a href="https://syndro-1.github.io/syndro/CTF/PatriotCTF2025/patriotctf2025" class="back-btn">Back</a>
+  <a href="../../index.html" class="back-btn">Back</a>
 
   <div class="writeup">
     <div class="title">
@@ -225,7 +190,7 @@
 cat flag2.txt</code></pre>
 
     <div class="flag-box">
-      <div class="flag">MASONCC{images_****}</div>
+      <div class="flag">MASONCC{images_can_hide_secrets}</div>
     </div>
 
     <div class="image-grid">
@@ -237,12 +202,12 @@ cat flag2.txt</code></pre>
 
     <div class="footer-note">
       Writeup by Syndro • 
-      <a href="https://github.com/syndro-1">GitHub</a> • 
+      <a href="https://github.com/ayco-sy">GitHub</a> • 
       <a href="https://syndro-1.github.io/syndro/">All writeups</a>
     </div>
   </div>
 
-  <!-- FULLSCREEN IMAGE MODAL -->
+  <!-- FULLSCREEN MODAL -->
   <div class="modal" id="imageModal">
     <span class="close-modal" onclick="document.getElementById('imageModal').classList.remove('active')">&times;</span>
     <img id="modalImage" src="" alt="Full size">
@@ -255,12 +220,10 @@ cat flag2.txt</code></pre>
         document.getElementById('imageModal').classList.add('active');
       };
     });
-    document.getElementById('imageModal').onclick = (e) => {
-      if (e.target === document.getElementById('imageModal') || e.target.classList.contains('close-modal')) {
+    document.getElementById('imageModal').onclick = e => {
+      if (e.target === document.getElementById('imageModal') || e.target.classList.contains('close-modal'))
         document.getElementById('imageModal').classList.remove('active');
-      }
     };
   </script>
-
 </body>
 </html>
