@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-  // Apply saved theme on EVERY page
-  if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
-    document.documentElement.classList.add("light");
-  } else {
-    document.documentElement.classList.remove("light");
-  }
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>syndro | CTF Writeups</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <canvas id="matrix"></canvas>
   <div class="container">
     <div class="toggle" id="themeToggle">Theme</div>
     <div class="ctf-toggle" id="ctfToggle">CTFs</div>
+
     <header>
       <h1 id="glitch">Syndro</h1>
       <div class="solve-counter" id="solveCounter">0 SOLVED</div>
     </header>
+
     <div class="terminal" id="terminal">
       <div>$ whoami</div>
       <div>Syndro</div>
       <div>$ cat bio.txt</div>
       <div class="typing">CTF player • Web & Misc destroyer • PHP shell enthusiast • Student at AOU</div>
     </div>
+
     <div class="bio">
       <p>Trying my best in every CTF. Every flag is a story. Every writeup is a war crime against the challenge author.</p>
       <p>
@@ -39,7 +34,15 @@
         <a href="https://medium.com/@syndro" target="_blank">Medium</a>
       </p>
     </div>
-    <h2 class="section-title">Write ups!</h2>
+
+    <h2 class="section-title">Writeups</h2>
+
+    <!-- SEARCH BAR -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search challenges..." autocomplete="off">
+      <span class="search-icon">Search</span>
+    </div>
+
     <div class="tabs" id="challengeTabs">
       <div class="tab active" data-cat="all">All</div>
       <div class="tab" data-cat="misc">Misc</div>
@@ -48,9 +51,17 @@
       <div class="tab" data-cat="pwn">Pwn</div>
       <div class="tab" data-cat="forensics">Forensics</div>
     </div>
-    <div class="cards" id="challengeCards"></div>
-    <footer>syndro • Built with rage, RGB, and zero sleep ( actually zero sleep 😟 )</footer>
+
+    <div class="cards" id="challengeCards">
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <h3>No challenges found</h3>
+        <p>Try a different search term or category</p>
+      </div>
+    </div>
+
+    <footer>syndro &bull; Built with rage, RGB, and zero sleep (actually zero sleep)</footer>
   </div>
+
   <!-- CTF MODAL -->
   <div class="modal-overlay" id="ctfModal">
     <div class="modal-content">
