@@ -104,7 +104,7 @@ const ctfs = [
 
 function renderCTFs() {
   document.getElementById("ctfGrid").innerHTML = ctfs.map(ctf => `
-    <div class="ctf-card" onclick="location.href='${ctf.link}'">
+    <div class="ctf-card" onclick="location.href='${link}'">
       <h3>${ctf.name}</h3>
       <p>${ctf.solves} solves</p>
       <p style="color:${ctf.color};font-weight:bold">${ctf.status}</p>
