@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PatriotCTF 2025 • syndro</title>
 
-  <!-- GLOBAL THEME PERSISTENCE -->
+  <!-- THEME PERSISTENCE -->
   <script>
     (function() {
       const saved = localStorage.getItem('theme');
@@ -19,21 +19,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    :root { --accent: #58a6ff; --green: #3fb950; --purple: #8b5cf6; --pink: #f472b6; }
-    .light { --accent: #1f6feb; --green: #238636; }
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --text: #f0f6fc;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --border: #30363d;
+    }
+    .light {
+      --bg: #ffffff;
+      --card: #f6f8fa;
+      --text: #24292f;
+      --accent: #1f6feb;
+      --border: #d0d7de;
+    }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #e6edf3;
+      font-family: 'Roboto Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
+      position: relative;
     }
-    .light body { background: #f6f8fa; color: #0d1117; }
 
-    /* GORGEOUS BACK BUTTON — SYNDRO SIGNATURE */
+    /* MATRIX RAIN */
+    canvas#matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+      opacity: 0.15;
+    }
+
+    /* SCANLINES */
+    #scanline-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,180,0.03) 2px, rgba(0,255,180,0.03) 4px);
+      animation: scanline 10s linear infinite;
+      z-index: -1;
+    }
+    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+
+    /* BACK BUTTON */
     .back-btn {
       position: fixed;
       top: 30px;
@@ -41,37 +73,51 @@
       z-index: 9999;
       background: var(--accent);
       color: #000;
-      padding: 18px 48px;
+      padding: 16px 44px;
       border-radius: 60px;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       text-decoration: none;
-      box-shadow: 0 12px 40px rgba(88,166,255,0.6);
+      box-shadow: 0 0 30px rgba(88,166,255,0.6);
       transition: all 0.4s ease;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
+      border: 2px solid transparent;
     }
     .back-btn:hover {
-      transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 20px 60px rgba(88,166,255,0.8);
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 0 50px rgba(88,166,255,0.9);
     }
     .light .back-btn { color: white; }
 
-    /* HERO HEADER */
+    /* THEME BUTTON — SAME AS MAIN SITE */
+    .theme-toggle {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 9999;
+      background: var(--card);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(88,166,255,0.5);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: #000;
+      transform: scale(1.08);
+      box-shadow: 0 0 40px rgba(88,166,255,0.8);
+    }
+
+    /* HEADER */
     .header {
       text-align: center;
       padding: 180px 20px 100px;
-      position: relative;
-      overflow: hidden;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(13,17,23,0.9), rgba(22,27,34,0.95));
-      z-index: -1;
     }
     .header h1 {
       font-family: 'Orbitron', sans-serif;
@@ -80,8 +126,7 @@
       background: linear-gradient(90deg, #58a6ff, #8b5cf6, #f472b6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       text-shadow: 0 0 40px rgba(88,166,255,0.5);
     }
     .light .header h1 {
@@ -90,94 +135,80 @@
       -webkit-text-fill-color: transparent;
     }
     .header p {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-top: 20px;
-      opacity: 0.9;
+      opacity: 0.85;
       font-weight: 300;
     }
 
-    /* MAIN CONTAINER */
-    .container {
+    /* GRID */
+    .grid {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 30px 150px;
-    }
-
-    /* CHALLENGES GRID */
-    .grid {
+      padding: 0 30px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 32px;
-      margin-top: 60px;
+      gap: 34px;
     }
 
     .card {
-      background: rgba(13,17,23,0.95);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(88,166,255,0.2);
-      border-radius: 24px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 20px;
       padding: 32px;
       cursor: pointer;
       transition: all 0.5s ease;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    .light .card {
-      background: rgba(255,255,255,0.95);
-      border-color: rgba(88,166,255,0.15);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    }
-
     .card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 6px;
-      background: linear-gradient(90deg, var(--accent), var(--purple), var(--pink));
-      border-radius: 24px 24px 0 0;
+      background: linear-gradient(90deg, var(--accent), #8b5cf6, #f472b6);
+      border-radius: 20px 20px 0 0;
     }
-
     .card:hover {
-      transform: translateY(-20px);
+      transform: translateY(-18px);
       border-color: var(--accent);
-      box-shadow: 0 30px 80px rgba(88,166,255,0.5);
+      box-shadow: 0 25px 60px rgba(88,166,255,0.5);
     }
 
     .tag {
       position: absolute;
       top: 16px;
       right: 16px;
-      padding: 6px 16px;
+      padding: 8px 18px;
       border-radius: 30px;
       font-size: 0.8rem;
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .tag.misc { background: #3fb950; color: #000; }
-    .tag.web { background: #FF0000; color: #000; }
-    .tag.pwn { background: #f85149; color: #fff; }
-    .tag.crypto { background: #ffa657; color: #000; }
-    .tag.forensics { background: #9c72ff; color: #fff; }
+    .tag.misc       { background: #3fb950; color: #000; }
+    .tag.web        { background: #ff0000; color: #fff; }
+    .tag.pwn        { background: #f85149; color: #fff; }
+    .tag.crypto     { background: #ffa657; color: #000; }
+    .tag.forensics  { background: #9c72ff; color: #fff; }
+    .tag.rev        { background: #ff79c6; color: #000; }
 
     .card h3 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.6rem;
-      margin: 10px 0 16px;
+      font-size: 1.7rem;
       color: var(--accent);
+      margin: 8px 0 16px;
     }
-
     .card .flag {
       font-family: 'Roboto Mono', monospace;
       font-size: 1.1rem;
       color: var(--green);
+      padding: 14px 0;
+      border-top: 1px dashed rgba(88,166,255,0.3);
+      border-bottom: 1px dashed rgba(88,166,255,0.3);
       margin: 16px 0;
-      padding: 12px 0;
-      border-top: 1px solid rgba(88,166,255,0.2);
-      border-bottom: 1px solid rgba(88,166,255,0.2);
     }
-
     .card small {
       opacity: 0.7;
       font-size: 0.95rem;
@@ -185,65 +216,100 @@
 
     /* MOBILE */
     @media (max-width: 768px) {
-      .back-btn {
+      .header h1 { font-size: 4.5rem; }
+      .header { padding: 140px 20px 80px; }
+      .back-btn, .theme-toggle {
         position: static;
-        margin: 40px auto;
         display: block;
+        margin: 20px auto;
         width: fit-content;
       }
-      .header h1 { font-size: 4.5rem; }
-      .grid { grid-template-columns: 1fr; padding: 0 20px; }
+      .theme-toggle { margin-top: 10px; }
+      .grid { padding: 0 20px; }
     }
   </style>
 </head>
 <body>
 
-  <a href="https://syndro-1.github.io/syndro/" class="back-btn">Back</a>
+  <!-- MATRIX BACKGROUND -->
+  <canvas id="matrix"></canvas>
+  <div id="scanline-overlay"></div>
 
+  <!-- BACK BUTTON -->
+  <a href="https://syndro-1.github.io/syndro/" class="back-btn">Back to Portfolio</a>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle" id="themeToggle">Theme</div>
+
+  <!-- HEADER -->
   <div class="header">
     <h1>PATRIOTCTF 2025</h1>
     <p>Solved Challenges • Writeups by syndro</p>
   </div>
 
-  <div class="container">
-    <div class="grid" id="grid">
-      <!-- Cards injected here by JS -->
-    </div>
-  </div>
+  <!-- CHALLENGES GRID -->
+  <div class="grid" id="grid"></div>
 
   <script>
+    // MATRIX RAIN
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+    const fontSize = 14;
+    let columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(13,17,23,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0f0';
+      ctx.font = `${fontSize}px monospace`;
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 33);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      columns = canvas.width / fontSize;
+    });
+
+    // CHALLENGES
     const challenges = [
-      // MISC
       { title: "Reverse Metadata Part 1", file: "Misc/ReverseMetaData1", flag: "MASONCC{images_****}", type: "misc" },
       { title: "Reverse Metadata Part 2", file: "Misc/ReverseMetaData2", flag: "PCTF{hidden_****}", type: "misc" },
-
-      // WEB
-      { title: "Connection Tester",file: "Web/ConnectionTester",flag: "PCTF{C0nnection_****}", type: "web" },
+      { title: "Connection Tester", file: "Web/ConnectionTester", flag: "PCTF{C0nnection_****}", type: "web" },
       { title: "Feedback Fallout", file: "Web/FeedbackFallout", flag: "PCTF{SQLI_****}", type: "web" },
-      { title: "SecureAuth",file: "Web/SecureAuth", flag: "PCTF{cant_****}", type: "web" },
-      { title: "TrustFall", file: "Web/TrustFall",flag: "PCTF{auth_****}", type: "web" },
-      { title: "TrustVault",file: "Web/TrustVault", flag: "FLAG{py7h0n_****}", type: "web" },
+      { title: "SecureAuth", file: "Web/SecureAuth", flag: "PCTF{cant_****}", type: "web" },
+      { title: "TrustFall", file: "Web/TrustFall", flag: "PCTF{auth_****}", type: "web" },
+      { title: "TrustVault", file: "Web/TrustVault", flag: "FLAG{py7h0n_****}", type: "web" },
     ];
 
     const grid = document.getElementById("grid");
+    challenges.forEach(c => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="tag ${c.type}">${c.type.toUpperCase()}</div>
+        <h3>${c.title}</h3>
+        <div class="flag">${c.flag}</div>
+        <small>Click to read writeup</small>
+      `;
+      card.onclick = () => location.href = c.file;
+      grid.appendChild(card);
+    });
 
-    if (challenges.length === 0) {
-      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:100px;color:#888;"><h2>No challenges yet</h2></div>`;
-    } else {
-      challenges.forEach(c => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <div class="tag ${c.type}">${c.type}</div>
-          <h3>${c.title}</h3>
-          <div class="flag">${c.flag}</div>
-          <small>Click to read full writeup</small>
-        `;
-        card.onclick = () => location.href = c.file;
-        grid.appendChild(card);
-      });
-    }
+    // THEME TOGGLE
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('light');
+      localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+    });
   </script>
-
 </body>
 </html>
