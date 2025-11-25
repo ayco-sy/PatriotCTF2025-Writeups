@@ -40,7 +40,7 @@ const challenges = [
   {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault", flag:"FLAG{py7h0n_****}", type:"web"},
 ];
 
-// ——— PERFECT PROGRESS + NEON TRAILS ———
+// MAIN PROGRESS + COLORED BACKGROUND + NEON TRAILS
 function updateCategoryStats() {
   const solved = { web:0, misc:0, crypto:0, pwn:0, forensics:0, rev:0 };
   challenges.forEach(c => {
@@ -55,11 +55,25 @@ function updateCategoryStats() {
       const totalChallenges = Object.values(totals).reduce((a,b) => a + b, 0);
       const percent = totalChallenges > 0 ? Math.round((totalSolved / totalChallenges) * 100) : 0;
 
+      // Update progress
       const circle = document.getElementById('circle-overall');
       const text = document.getElementById('text-overall');
+      const bgCircle = document.querySelector('.circle-bg-dynamic');
+
       if (circle) circle.style.strokeDashoffset = 100 - percent;
       if (text) text.textContent = `${percent}%`;
 
+      // Color the background circle based on progress
+      if (bgCircle) {
+        if (percent >= 80) bgCircle.style.stroke = '#39ff14';
+        else if (percent >= 60) bgCircle.style.stroke = '#00ff9d';
+        else if (percent >= 40) bgCircle.style.stroke = '#00d0ff';
+        else if (percent >= 20) bgCircle.style.stroke = '#ffa500';
+        else bgCircle.style.stroke = '#ff2e63';
+        bgCircle.style.opacity = 0.25 + (percent / 200);
+      }
+
+      // Trails
       const container = document.getElementById('category-trails');
       container.innerHTML = '';
 
@@ -120,7 +134,7 @@ function renderChallenges(filter = "all") {
   });
 }
 
-// Tabs
+// Tabs + Modal + Theme + Init
 document.querySelectorAll('#challengeTabs .tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('#challengeTabs .tab').forEach(t => t.classList.remove('active'));
@@ -129,7 +143,6 @@ document.querySelectorAll('#challengeTabs .tab').forEach(tab => {
   });
 });
 
-// CTF Modal
 const ctfs = [{ name: "PatriotCTF 2025", link: "CTF/PatriotCTF2025/patriotctf2025", solves: "7+", status: "Ended", color: "#8b949e" }];
 document.getElementById("ctfGrid").innerHTML = ctfs.map(c => `
   <div class="ctf-card" onclick="location.href='${c.link}'">
@@ -141,18 +154,15 @@ document.getElementById('ctfToggle')?.addEventListener('click', () => document.g
 document.querySelector('.close-modal')?.addEventListener('click', () => document.getElementById('ctfModal').classList.remove('open'));
 document.getElementById('ctfModal')?.addEventListener('click', e => { if (e.target.id === 'ctfModal') document.getElementById('ctfModal').classList.remove('open'); });
 
-// Theme
 document.getElementById('themeToggle')?.addEventListener('click', () => {
   document.documentElement.classList.toggle('light');
   localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
 });
 
-// Animations
 setTimeout(() => document.getElementById('terminal')?.classList.add('reveal'), 800);
 setTimeout(() => document.querySelector('.bio')?.classList.add('reveal'), 2000);
 setTimeout(() => document.getElementById('challengeCards')?.classList.add('reveal'), 2800);
 
-// Init
 renderChallenges();
 updateCategoryStats();
 populateRecentSolves();
