@@ -81,7 +81,7 @@ header{text-align:center;padding:80px 20px}
 #glitch:hover{animation:glitch 1s infinite}
 @keyframes glitch{0%,100%{text-shadow:0 0 10px #58a6ff}2%{text-shadow:5px 0 #f85149,-5px 0 #3fb950}4%{text-shadow:-5px 0 #f85149,5px 0 #3fb950}}
 
-.terminal{background:#000;color:#0f0;padding:20px;border-radius:12px;margin:40px auto;max-width:800px;box-shadow:0 0 30px #0f03;inset: 0 0 20px #0f03;font-size:1.1rem;opacity:0;transform:translateY(30px);transition:all 1s}
+.terminal{background:#000;color:#0f0;padding:20px;border-radius:12px;margin:40px auto;max-width:800px;box-shadow:0 0 30px #0f03;inset 0 0 20px #0f03;font-size:1.1rem;opacity:0;transform:translateY(30px);transition:all 1s}
 .typing::after{content:'|';animation:blink 1s infinite}
 @keyframes blink{50%{opacity:0}}
 
@@ -128,8 +128,6 @@ footer{text-align:center;margin:100px 0 50px;opacity:0.6}
   .container{padding-left:20px}
 }
 
-/* DIGITAL CLOCK - Top Right */
-/* DIGITAL CLOCK - Bottom Right (floating orb style) */
 #liveClock {
   position: fixed;
   bottom: 30px;
