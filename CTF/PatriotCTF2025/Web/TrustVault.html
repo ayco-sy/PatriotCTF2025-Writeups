@@ -163,29 +163,29 @@
     <h1>Trust Vault</h1>
     <div class="meta">PatriotCTF 2025 • <span>Web</span> • syndro</div>
 
-    <h2>Initial Observations</h2>
-    <p>The description literally hands us the combo:</p>
-    <ul>
-      <li>Backend uses <strong>Jinja2</strong> templates</li>
-      <li>There’s a <strong>vulnerable SQL query</strong></li>
-    </ul>
-    <p>→ SQLi → SSTI chain incoming.</p>
+    <h2>0. The challenge description</h2>
+    <p>The description gives us a pretty big hint.</p>
     <img src="https://github.com/user-attachments/assets/aa873df1-6055-4ed9-9129-aefebebdbef0" alt="Challenge description">
+    <ul>
+      <li><strong>Jinja2</strong> template</li>
+      <li><strong>vulnerable SQL query</strong></li>
+    </ul>
+    <p>→SQLi into SSTI Payload pretty much.</p>
 
+    <h2>1. The challenge page.</h2>
     <p>Register → login → dashboard with four tabs. Only <strong>Bookmarks</strong> is useful.</p>
     <img src="https://github.com/user-attachments/assets/df9a14c6-ea35-4c40-ad51-4ce70c7b471e" alt="Dashboard tabs">
 
-    <h2>Finding the SSTI Endpoint</h2>
-    <p>Adding <code>{{7*7}}</code> as a bookmark → reflected as plain text. Not rendered.</p>
+    <p>Adding <code>"{{7*7}}'</code> as a bookmark → reflected as plain text. Not rendered.</p>
     <img src="https://github.com/user-attachments/assets/e0370a28-153c-4781-b92d-44393d1123fc" alt="Plain text reflection">
 
     <p>View source on Bookmarks tab → hidden comment:</p>
     <pre><code>&lt;!-- &lt;p&gt;Legacy console: &lt;a href="/search"&gt;/search&lt;/a&gt;&lt;/p&gt; --&gt;</code></pre>
 
     <p>Visit <code>/search</code> → renders all bookmarks as Jinja2 templates!<br>
-    Test <code>{{7*7}}</code> → <strong>49</strong> → SSTI confirmed.</p>
+    Test <code>"{{7*7}}'</code> → <strong>49</strong> → Jinja confirmed.</p>
 
-    <h2>SQLi → SSTI One-Liner</h2>
+    <h2>2. SSTI Embedded inside of SQLi</h2>
     <p>Bookmarks are stored via raw SQL → inject SSTI payload directly into the database.</p>
 
     <p>Final payload in the bookmark field:</p>
