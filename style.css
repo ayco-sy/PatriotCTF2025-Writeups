@@ -48,7 +48,7 @@ header { text-align:center; padding:80px 20px }
 @keyframes scan { 0%{background-position:0 0} 100%{background-position:200% 200%} }
 
 .category-tag { position:absolute; top:15px; right:15px; padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:bold }
-.tag-misc{background:#3fb950;color:#000}.tag-web{background:#58a6ff;color:#000}
+.tag-misc{background:#3fb950;color:#000}.tag-web{background:#FF0000;color:#000}
 .tag-pwn{background:#f85149;color:#fff}.tag-crypto{background:#ffa657;color:#000}
 .tag-forensics{background:#9c72ff;color:#fff}.tag-rev{background:#ff79c6;color:#000}
 
@@ -125,12 +125,12 @@ p, h1, h2, h3, small, .meta, .footer-note {
   color: #0d1117 !important;
 }
 a:link {
-  color: #737FD9;
+  color: #58a6ff;
   background-color: transparent;
   text-decoration: none;
 }
 a:visited {
-  color: #737FD9;
+  color: #58a6ff;
   background-color: transparent;
   text-decoration: none;
 }
