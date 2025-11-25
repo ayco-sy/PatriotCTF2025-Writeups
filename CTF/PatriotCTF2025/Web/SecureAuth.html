@@ -121,7 +121,7 @@
     .back:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 60px rgba(88,166,255,0.8); }
     .light .back { color: white; }
 
-    .modal {
+   .modal {
       display: none;
       position: fixed;
       z-index: 9999;
@@ -162,7 +162,7 @@
       .back { position: static; display: block; margin: 30px auto; width: fit-content; }
       .close-modal { top: 15px; right: 15px; font-size: 3rem; }
     }
-       .theme-toggle {
+      .theme-toggle {
       position: fixed;
       top: 30px;
       right: 30px;
@@ -194,6 +194,7 @@
   <div class="container">
     <h1>SecureAuth™</h1>
     <div class="meta">PatriotCTF 2025 • <span>Web</span> • syndro</div>
+    <div class="theme-toggle" id="themeToggle">Theme</div>
     
     <h2>0. The Challenge description</h2>
     <p>There is not much in challenge description</p>
@@ -245,21 +246,25 @@ Password: {"$ne": null}</code></pre>
   </div>
 
   <script>
-    document.querySelectorAll('img').forEach(img => {
-      if (!img.closest('.modal')) {
-        img.onclick = () => {
-          document.getElementById('modalImage').src = img.src;
-          document.getElementById('imageModal').classList.add('active');
-        };
-      }
-    });
-    document.getElementById('imageModal').onclick = function(e) {
-      if (e.target === this || e.target.classList.contains('close-modal')) {
-        this.classList.remove('active');
-      }
-    };
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
 
-      // ESC key also closes
+  document.querySelectorAll('img').forEach(img => {
+    if (img.closest('#imageModal')) return;
+    img.onclick = () => {
+      modalImg.src = img.src;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.classList.contains('close-modal')) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
       modal.classList.remove('active');
@@ -267,11 +272,11 @@ Password: {"$ne": null}</code></pre>
     }
   });
 
-      // Theme toggle
   document.getElementById('themeToggle')?.addEventListener('click', () => {
     document.documentElement.classList.toggle('light');
     localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
   });
+
   </script>
 </body>
 </html>
