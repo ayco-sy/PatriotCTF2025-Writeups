@@ -17,6 +17,32 @@
 </head>
 <body>
   <canvas id="matrix"></canvas>
+  <div id="scanline-overlay"></div> <!-- New: CRT scanline overlay -->
+  
+  <!-- New: Fixed left sidebar -->
+  <aside class="sidebar-left">
+    <div class="stats-card">
+      <h3 id="sidebarSolveCounter">0 / 42</h3>
+      <p>solved</p>
+      <div class="progress-ring">
+        <svg viewBox="0 0 36 36">
+          <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          <path class="circle" id="progressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+      </div>
+    </div>
+    <div class="recent-solves">
+      <h4>Recent Solves</h4>
+      <ul id="recentSolvesList"></ul>
+    </div>
+    <div class="quick-links">
+      <a href="https://github.com/ayco-sy" target="_blank">GitHub</a>
+      <a href="https://x.com/Syndro_1" target="_blank">X/Twitter</a>
+      <a href="https://discordapp.com/users/313717103150759950" target="_blank">Discord</a>
+      <a href="https://medium.com/@syndro" target="_blank">Medium</a>
+    </div>
+  </aside>
+
   <div class="container">
     <div class="toggle" id="themeToggle">Theme</div>
     <div class="ctf-toggle" id="ctfToggle">CTFs</div>
