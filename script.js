@@ -29,7 +29,7 @@ if (canvas) {
   });
 }
 
-// Challenges list (add all your solves here)
+// Your challenges
 const challenges = [
   {title:"Reverse Metadata Part 1", file:"CTF/PatriotCTF2025/Misc/ReverseMetaData1", flag:"MASONCC{images_****}", type:"misc"},
   {title:"Reverse Metadata Part 2", file:"CTF/PatriotCTF2025/Misc/ReverseMetaData2", flag:"PCTF{hidden_****}", type:"misc"},
@@ -40,6 +40,7 @@ const challenges = [
   {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault", flag:"FLAG{py7h0n_****}", type:"web"},
 ];
 
+// AUTO % + GLOWING CIRCLE + NEON TRAILS
 function updateCategoryStats() {
   const solved = { web:0, misc:0, crypto:0, pwn:0, forensics:0, rev:0 };
   challenges.forEach(c => {
@@ -51,35 +52,35 @@ function updateCategoryStats() {
   fetch('totals.json')
     .then(r => r.json())
     .then(totals => {
-      const totalChallenges = Object.values(totals).reduce((a,b) => a+b, 0);
-      const overallPercent = totalChallenges > 0 ? Math.round((totalSolved / totalChallenges) * 100) : 0;
+      const totalChallenges = Object.values(totals).reduce((a,b) => a + b, 0);
+      const percent = totalChallenges > 0 ? Math.round((totalSolved / totalChallenges) * 100) : 0;
 
-      // Update main circle
+      // Update main glowing circle
       const circle = document.getElementById('circle-overall');
       const text = document.getElementById('text-overall');
-      if (circle) circle.style.strokeDashoffset = 100 - overallPercent;
-      if (text) text.textContent = `${overallPercent}%`;
+      if (circle) circle.style.strokeDashoffset = 100 - percent;
+      if (text) text.textContent = `${percent}%`;
 
-      // Generate trails for solved categories
-      const trailsContainer = document.getElementById('category-trails');
-      trailsContainer.innerHTML = '';
+      // Generate neon trails for solved categories
+      const container = document.getElementById('category-trails');
+      container.innerHTML = '';
 
-      const categories = [
-        { type: 'web',       label: 'WEB',       angle: 320 },
-        { type: 'misc',      label: 'MISC',      angle: 30 },
-        { type: 'crypto',    label: 'CRYPTO',    angle: 80 },
-        { type: 'pwn',       label: 'PWN',       angle: 150 },
-        { type: 'forensics', label: 'FORENSICS', angle: 210 },
-        { type: 'rev',       label: 'REV',       angle: 260 }
+      const cats = [
+        {type:'web',       label:'WEB',       angle:320},
+        {type:'misc',      label:'MISC',      angle:30},
+        {type:'crypto',    label:'CRYPTO',    angle:80},
+        {type:'pwn',       label:'PWN',       angle:150},
+        {type:'forensics', label:'FORENSICS', angle:210},
+        {type:'rev',       label:'REV',       angle:260}
       ];
 
-      categories.forEach(cat => {
+      cats.forEach(cat => {
         if (solved[cat.type] > 0) {
           const trail = document.createElement('div');
           trail.className = `category-trail trail-${cat.type}`;
-          trail.dataset.label = `${cat.label} • ${solved[cat.type]} solved`;
-          trail.style.transform = `rotate(${cat.angle}deg) translateX(10px)`;
-          trailsContainer.appendChild(trail);
+          trail.dataset.label = `${cat.label} • ${solved[cat.type]}`;
+          trail.style.transform = `rotate(${cat.angle}deg)`;
+          container.appendChild(trail);
         }
       });
     })
@@ -88,9 +89,6 @@ function updateCategoryStats() {
     });
 
   document.getElementById("solveCounter").textContent = `${totalSolved} SOLVED`;
-}
-
-  document.getElementById("solveCounter").textContent = `${challenges.length} SOLVED`;
 }
 
 // Recent solves
@@ -105,7 +103,7 @@ function populateRecentSolves() {
   });
 }
 
-// Render cards
+// Render challenge cards
 function renderChallenges(filter = "all") {
   const container = document.getElementById("challengeCards");
   container.innerHTML = "";
@@ -143,16 +141,18 @@ document.getElementById('ctfToggle')?.addEventListener('click', () => document.g
 document.querySelector('.close-modal')?.addEventListener('click', () => document.getElementById('ctfModal').classList.remove('open'));
 document.getElementById('ctfModal')?.addEventListener('click', e => { if (e.target.id === 'ctfModal') document.getElementById('ctfModal').classList.remove('open'); });
 
-// Theme + animations
+// Theme toggle
 document.getElementById('themeToggle')?.addEventListener('click', () => {
   document.documentElement.classList.toggle('light');
   localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
 });
+
+// Animations
 setTimeout(() => document.getElementById('terminal')?.classList.add('reveal'), 800);
 setTimeout(() => document.querySelector('.bio')?.classList.add('reveal'), 2000);
 setTimeout(() => document.getElementById('challengeCards')?.classList.add('reveal'), 2800);
 
-// Init
+// Init everything
 renderChallenges();
 updateCategoryStats();
 populateRecentSolves();
