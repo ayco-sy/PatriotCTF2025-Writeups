@@ -41,26 +41,54 @@ const challenges = [
 ];
 
 function updateCategoryStats() {
-  const total_solved = challenges.length;
+  const solved = { web:0, misc:0, crypto:0, pwn:0, forensics:0, rev:0 };
+  challenges.forEach(c => {
+    if (solved.hasOwnProperty(c.type)) solved[c.type]++;
+  });
+
+  const totalSolved = challenges.length;
 
   fetch('totals.json')
     .then(r => r.json())
     .then(totals => {
-      const total_challenges = Object.values(totals).reduce((sum, val) => sum + val, 0);
-      const percent = total_challenges > 0 ? Math.round((total_solved / total_challenges) * 100) : 0;
+      const totalChallenges = Object.values(totals).reduce((a,b) => a+b, 0);
+      const overallPercent = totalChallenges > 0 ? Math.round((totalSolved / totalChallenges) * 100) : 0;
+
+      // Update main circle
       const circle = document.getElementById('circle-overall');
       const text = document.getElementById('text-overall');
-      if (circle && text) {
-        circle.style.strokeDashoffset = 100 - percent;
-        text.textContent = `${percent}%`;
-      }
+      if (circle) circle.style.strokeDashoffset = 100 - overallPercent;
+      if (text) text.textContent = `${overallPercent}%`;
+
+      // Generate trails for solved categories
+      const trailsContainer = document.getElementById('category-trails');
+      trailsContainer.innerHTML = '';
+
+      const categories = [
+        { type: 'web',       label: 'WEB',       angle: 320 },
+        { type: 'misc',      label: 'MISC',      angle: 30 },
+        { type: 'crypto',    label: 'CRYPTO',    angle: 80 },
+        { type: 'pwn',       label: 'PWN',       angle: 150 },
+        { type: 'forensics', label: 'FORENSICS', angle: 210 },
+        { type: 'rev',       label: 'REV',       angle: 260 }
+      ];
+
+      categories.forEach(cat => {
+        if (solved[cat.type] > 0) {
+          const trail = document.createElement('div');
+          trail.className = `category-trail trail-${cat.type}`;
+          trail.dataset.label = `${cat.label} • ${solved[cat.type]} solved`;
+          trail.style.transform = `rotate(${cat.angle}deg) translateX(10px)`;
+          trailsContainer.appendChild(trail);
+        }
+      });
     })
     .catch(() => {
-      const text = document.getElementById('text-overall');
-      if (text) text.textContent = total_solved > 0 ? total_solved : '0';
-      const circle = document.getElementById('circle-overall');
-      if (circle) circle.style.strokeDashoffset = 100;
+      document.getElementById('text-overall').textContent = totalSolved;
     });
+
+  document.getElementById("solveCounter").textContent = `${totalSolved} SOLVED`;
+}
 
   document.getElementById("solveCounter").textContent = `${challenges.length} SOLVED`;
 }
