@@ -81,7 +81,7 @@ header{text-align:center;padding:80px 20px}
 #glitch:hover{animation:glitch 1s infinite}
 @keyframes glitch{0%,100%{text-shadow:0 0 10px #58a6ff}2%{text-shadow:5px 0 #f85149,-5px 0 #3fb950}4%{text-shadow:-5px 0 #f85149,5px 0 #3fb950}}
 
-.terminal{background:#000;color:#0f0;padding:20px;border-radius:12px;margin:40px auto;max-width:800px;box-shadow:0 0 30px #0f03;inset 0 0 20px #0f03;font-size:1.1rem;opacity:0;transform:translateY(30px);transition:all 1s}
+.terminal{background:#000;color:#0f0;padding:20px;border-radius:12px;margin:40px auto;max-width:800px;box-shadow:0 0 30px #0f03;inset: 0 0 20px #0f03;font-size:1.1rem;opacity:0;transform:translateY(30px);transition:all 1s}
 .typing::after{content:'|';animation:blink 1s infinite}
 @keyframes blink{50%{opacity:0}}
 
@@ -126,4 +126,106 @@ footer{text-align:center;margin:100px 0 50px;opacity:0.6}
 @media (max-width:800px){
   .sidebar-left{transform:translateX(-100%)}
   .container{padding-left:20px}
+}
+
+/* DIGITAL CLOCK - Top Right */
+/* DIGITAL CLOCK - Bottom Right (floating orb style) */
+#liveClock {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(13,17,23,0.92);
+  padding: 16px 28px;
+  border-radius: 50px;
+  border: 3px solid var(--accent);
+  backdrop-filter: blur(14px);
+  z-index: 999;
+  box-shadow: 0 0 60px rgba(88,166,255,0.6), inset 0 0 20px rgba(88,166,255,0.2);
+  text-shadow: 0 0 20px var(--accent);
+  animation: pulseGlow 4s infinite alternate;
+  transition: all 0.4s;
+}
+#liveClock::before {
+  content: '';
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  background: radial-gradient(circle, rgba(88,166,255,0.4), transparent 70%);
+  border-radius: 50px;
+  z-index: -1;
+  animation: ripple 6s infinite;
+}
+.light #liveClock {
+  background: rgba(255,255,255,0.95);
+  color: #1f6feb;
+  border-color: #1f6feb;
+  box-shadow: 0 0 50px rgba(31,111,235,0.5);
+  text-shadow: none;
+}
+
+@keyframes pulseGlow {
+  from { box-shadow: 0 0 60px rgba(88,166,255,0.6), inset 0 0 20px rgba(88,166,255,0.2); }
+  to { box-shadow: 0 0 90px rgba(88,166,255,0.9), inset 0 0 30px rgba(88,166,255,0.4); }
+}
+@keyframes ripple {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  #liveClock {
+    bottom: 20px;
+    right: 20px;
+    font-size: 1.7rem;
+    padding: 12px 22px;
+  }
+}
+
+/* VISITOR COUNTER - Bottom of sidebar */
+.visitor-counter {
+  margin-top: 60px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--green);
+  opacity: 0.8;
+  font-weight: bold;
+}
+#visitorCount {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.6rem;
+  color: var(--accent);
+  text-shadow: 0 0 15px var(--accent);
+}
+
+/* SEARCH BAR */
+#searchBar {
+  margin-left: 20px;
+  padding: 12px 20px;
+  width: 280px;
+  max-width: 100%;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.4s;
+}
+#searchBar:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(88,166,255,0.5);
+  transform: scale(1.03);
+}
+.light #searchBar { background: #ffffff; }
+
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+  #liveClock { right: 20px; font-size: 1.5rem; padding: 8px 16px; }
+  #searchBar { width: 220px; margin-top: 15px; display: block; margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 600px) {
+  #liveClock { top: 80px; right: 10px; font-size: 1.3rem; }
 }
