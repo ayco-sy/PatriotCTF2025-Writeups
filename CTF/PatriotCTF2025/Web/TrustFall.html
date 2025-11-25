@@ -162,30 +162,36 @@
   <div class="container">
     <h1>Trust Fall</h1>
     <div class="meta">PatriotCTF 2025 • <span>Web</span> • syndro</div>
-
+    <h2>0. The challenge description</h2>
+    <p>There is not much really.</p>
     <img src="https://github.com/user-attachments/assets/2eb922bd-6e5f-4032-95b6-0d94a1cccead" alt="Challenge banner">
 
-    <p><strong>This was by far my favorite challenge.</strong></p>
+    <h2>1. The login page</h2>
+    
     <p>From the get-go, we have zero info — just username & password placeholders.</p>
     <img src="https://github.com/user-attachments/assets/874c593c-3c6c-4520-b818-e066f94e3c9a" alt="Login screen">
 
-    <p>Tried classic SQLi to log in as the first user (usually admin) → no luck.<br>
-    Inspected source, Network tab → nothing useful.</p>
-
+    <p>Tried classic SQLi to log in as the first user (usually admin) → didn't work.<br>
+    Inspected source, Network tab → both are useless.</p>
+    
+    <h2>2. The dashboard</h2>
+    
     <p>So I just logged in with the placeholder values.</p>
     <img src="https://github.com/user-attachments/assets/d6bc4b7c-55ad-4fcf-857c-b396d0555631" alt="Main dashboard">
 
-    <p>Welcome page. Nothing interactive except product links and an “Admin Console” button in the bottom right — obviously our target.<br>
+    <p>Welcome page. Nothing interactive except product and an “Admin Console” button in the bottom right — obviously our target.<br>
     Clicking it → 403 Forbidden.</p>
 
-    <p>Noticed a signed session cookie. Modifying it is impossible without the secret, so I just <strong>deleted the cookie entirely</strong> → suddenly Admin Console is accessible!</p>
+    <p>Noticed a signed session cookie. Modifying it is impossible without the secret, so I just <strong>deleted the cookie entirely</strong> → And Admin Console is accessible!</p>
 
-    <p>…but it’s just a dummy page. Source reveals:</p>
+    <p>…but it’s there just for the UI: </p>
     <img src="https://github.com/user-attachments/assets/1dbfc75d-ecdc-4a4c-bf5e-20b6bd5a65b2" alt="Dummy admin source">
 
     <p>→ Pure UX garbage.</p>
 
-    <h2>Path Traversal & Fuzzing Time</h2>
+    
+
+    <h2>3. Checking the APIs/Assets</h2>
     <p>Network tab shows static files being loaded like:</p>
     <img src="https://github.com/user-attachments/assets/5741c3ba-b057-4f54-8b5b-db8715328d67" alt="Assets from IP/assets/ITEM">
 
@@ -197,29 +203,35 @@
     <p>Same pattern — maybe the API is also exposed and fuzzable?</p>
 
     <h2>ZAP Directory Fuzzing Magic</h2>
-    <p>Used Yassine Aboukir’s amazing API wordlist:<br>
+    <p>Used The following API-list:<br>
     <a href="https://gist.github.com/yassineaboukir/8e12adefbd505ef704674ad6ad48743d" target="_blank">https://gist.github.com/yassineaboukir/8e12adefbd505ef704674ad6ad48743d</a></p>
 
+    <h2>4. Set up ZAP</h2>
+
+    <p>So, We need to fuzz an Endpoint, We can do that through ZAP easily.</p>
+    <p>We select "proudcts" → Add → Strings → Paste our payload. </p>
+    
     <img src="https://github.com/user-attachments/assets/883354b4-50c3-4cf7-9413-749d0f1e84c8" alt="ZAP fuzz setup">
+
+    <p>Any page other than <code>the product page</code>we get redirected to the login. Could get annoying pretty quickly, So lets make a filter for it.</p>
+    <p>We go to Message Processors → Add → Type: Tag Creator → Regex: Found → Tag: Bad</p>
     <img src="https://github.com/user-attachments/assets/2d60e86f-70e2-44e7-91b0-f60dc2857802" alt="Filter out /login redirects">
 
-    <p>Filtered out 302s that redirect to /login → and boom:</p>
+    <p>And we find our endpoint!</p>
     <img src="https://github.com/user-attachments/assets/f22b6ce7-b3d4-4250-8622-de9d9d02cb24" alt="Found /users endpoint">
 
-    <h2>The Flag is User 0</h2>
+    <h2>5. THE FLAG</h2>
     <p><code>/users</code> exists! Trying <code>/users/1</code>, <code>/users/2</code> → normal users.<br>
-    But <code>/users/0</code> → flag!</p>
+    But <code>/users/0</code> Is usually the root/admin user So, We try it and there it is !</p>
 
     <img src="https://github.com/user-attachments/assets/87e2c8d7-df01-4af0-b9ef-254f67cd07bd" alt="Invalid ID message">
-    <img src="https://github.com/user-attachments/assets/2f80f0a6-0d4d-4a35-9411-8e603f12d2f4" alt="Product IDs hint">
     <img src="https://github.com/user-attachments/assets/74aed047-fe8e-441e-9eb2-36eb8e71e0e3" alt="Flag at user 0">
 
     <div class="flag">
       PCTF{auth_****}
     </div>
 
-    <p>Deleting the signed cookie + API fuzzing + user ID 0 = pure beauty.<br>
-    Hands down my favorite challenge of the CTF.</p>
+    <p>Well, Couldve been easier if we just guessed "users" api lol</p>
   </div>
 
   <!-- FULLSCREEN MODAL -->
