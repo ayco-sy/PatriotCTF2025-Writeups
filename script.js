@@ -182,7 +182,7 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
   });
 });
 
-// VISITOR COUNTER
+// VISITOR COUNTER 
 (function() {
   const key = 'syndro-ctf-writeups-visitors-v3';
   fetch(`https://api.countapi.xyz/hit/${key}`)
