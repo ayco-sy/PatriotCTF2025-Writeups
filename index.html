@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
-      document.documentElement.classList.add("light");
-    }
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>syndro | CTF Writeups</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+      document.documentElement.classList.add("light");
+    }
+  </script>
 </head>
 <body>
-  <body>
   <canvas id="matrix"></canvas>
   <div id="scanline-overlay"></div>
 
-  <!-- LIVE DIGITAL CLOCK (top-right corner) -->
+  <!-- LIVE DIGITAL CLOCK -->
   <div id="liveClock"></div>
 
   <!-- LEFT SIDEBAR -->
   <aside class="sidebar-left">
     <div class="stats-card">
-      <h3>Overall Progress</h3>
-      <div class="overall-container">
-        <div class="progress-ring-big">
-          <svg viewBox="0 0 36 36">
-            <path class="circle-bg-dynamic" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-            <path id="circle-overall" class="circle-progress" stroke-dasharray="100" stroke-dashoffset="100"/>
-          </svg>
-          <span id="text-overall" class="circle-text-big">0%</span>
-        </div>
-        <div id="category-trails"></div>
-      </div>
-      <div class="solve-counter-sidebar" id="solveCounter">0 SOLVED</div>
+  <h3>Overall Progress</h3>
+  <div class="overall-container">
+    <div class="progress-ring-big">
+      <svg viewBox="0 0 36 36">
+        <defs>
+          <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#58a6ff"/>
+            <stop offset="100%" stop-color="#8b5cf6"/>
+          </linearGradient>
+          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#39ff14"/>
+            <stop offset="100%" stop-color="#00ff9d"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#bgGradient)" opacity="0.25"/>
+        <path id="circle-overall" class="circle-progress" stroke="url(#progressGradient)" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#glow)"/>
+      </svg>
+      <span id="text-overall" class="circle-text-big">0%</span>
     </div>
+
+    <!-- CATEGORY PERCENTAGE TRAILS -->
+    <div id="category-trails">
+      <!-- Trails injected by JS -->
+    </div>
+  </div>
+  <div class="solve-counter-sidebar" id="solveCounter">0 SOLVED</div>
+</div>
 
     <div class="recent-solves">
       <h4>Recent Solves</h4>
@@ -49,7 +69,6 @@
       <a href="https://medium.com/@syndro" target="_blank">Medium</a>
     </div>
 
-    <!-- VISITOR COUNTER (far bottom) -->
     <div class="visitor-counter">
       <span id="visitorCount">—</span> visitors
     </div>
@@ -81,8 +100,7 @@
     </div>
 
     <h2 class="section-title">
-      Write ups!
-      <!-- SEARCH BAR -->
+      Writeups!
       <input type="text" id="searchBar" placeholder="Search writeups..." autocomplete="off">
     </h2>
 
@@ -109,9 +127,6 @@
       <div class="ctf-grid" id="ctfGrid"></div>
     </div>
   </div>
-
-  <script src="script.js"></script>
-</body>
 
   <script src="script.js"></script>
 </body>
