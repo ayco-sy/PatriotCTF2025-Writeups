@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
   <script>
-  // Apply saved theme on EVERY page
-  if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
-    document.documentElement.classList.add("light");
-  } else {
-    document.documentElement.classList.remove("light");
-  }
-</script>
+    if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+      document.documentElement.classList.add("light");
+    }
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>syndro | CTF Writeups</title>
@@ -17,26 +14,43 @@
 </head>
 <body>
   <canvas id="matrix"></canvas>
-  <div id="scanline-overlay"></div> <!-- New: CRT scanline overlay -->
-  
-  <!-- New: Fixed left sidebar -->
+  <div id="scanline-overlay"></div>
+
+  <!-- LEFT SIDEBAR -->
   <aside class="sidebar-left">
     <div class="stats-card">
-      <h3 id="sidebarSolveCounter">0 / 42</h3>
-      <p>solved</p>
-      <div class="progress-ring">
-        <svg viewBox="0 0 36 36">
-          <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-          <path class="circle" id="progressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-        </svg>
+      <h3>Category Progress</h3>
+      <div class="category-circles">
+        <div class="cat-circle">
+          <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="circle-web" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+          <span id="text-web" class="circle-text">0%</span><small>WEB</small>
+        </div>
+        <div class="cat-circle">
+          <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="circle-misc" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+          <span id="text-misc" class="circle-text">0%</span><small>MISC</small>
+        </div>
+        <div class="cat-circle">
+          <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="circle-crypto" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+          <span id="text-crypto" class="circle-text">0%</span><small>CRYPTO</small>
+        </div>
+        <div class="cat-circle">
+          <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="circle-forensics" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+          <span id="text-forensics" class="circle-text">0%</span><small>FORENSICS</small>
+        </div>
+        <div class="cat-circle">
+          <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="circle-pwn" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+          <span id="text-pwn" class="circle-text">0%</span><small>PWN</small>
+        </div>
       </div>
     </div>
+
     <div class="recent-solves">
       <h4>Recent Solves</h4>
       <ul id="recentSolvesList"></ul>
     </div>
+
     <div class="quick-links">
-      <a href="https://github.com/ayco-sy" target="_blank">GitHub</a>
+      <a href="https://github.com/syndro-1" target="_blank">GitHub</a>
       <a href="https://x.com/Syndro_1" target="_blank">X/Twitter</a>
       <a href="https://discordapp.com/users/313717103150759950" target="_blank">Discord</a>
       <a href="https://medium.com/@syndro" target="_blank">Medium</a>
@@ -46,26 +60,31 @@
   <div class="container">
     <div class="toggle" id="themeToggle">Theme</div>
     <div class="ctf-toggle" id="ctfToggle">CTFs</div>
+
     <header>
       <h1 id="glitch">Syndro</h1>
       <div class="solve-counter" id="solveCounter">0 SOLVED</div>
     </header>
+
     <div class="terminal" id="terminal">
       <div>$ whoami</div>
       <div>Syndro, Never thought I'd fall in love with web</div>
       <div>$ cat bio.txt</div>
       <div class="typing">CTF player @0xL4ugh • Web lover?! • Student at AOU</div>
     </div>
+
     <div class="bio">
-      <p>Tired most of the time.</p> <br> <br> <br>
+      <p>Tired most of the time.</p><br><br><br>
       <p>
-        <a href="https://github.com/ayco-sy" target="_blank">GitHub</a> •
+        <a href="https://github.com/syndro-1" target="_blank">GitHub</a> •
         <a href="https://x.com/Syndro_1" target="_blank">X/Twitter</a> •
         <a href="https://discordapp.com/users/313717103150759950" target="_blank">Discord</a> •
         <a href="https://medium.com/@syndro" target="_blank">Medium</a>
       </p>
     </div>
+
     <h2 class="section-title">Write ups!</h2>
+
     <div class="tabs" id="challengeTabs">
       <div class="tab active" data-cat="all">All</div>
       <div class="tab" data-cat="misc">Misc</div>
@@ -74,9 +93,11 @@
       <div class="tab" data-cat="pwn">Pwn</div>
       <div class="tab" data-cat="forensics">Forensics</div>
     </div>
+
     <div class="cards" id="challengeCards"></div>
     <footer>• syndro •</footer>
   </div>
+
   <!-- CTF MODAL -->
   <div class="modal-overlay" id="ctfModal">
     <div class="modal-content">
