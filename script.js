@@ -40,30 +40,26 @@ const challenges = [
   {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault", flag:"FLAG{py7h0n_****}", type:"web"},
 ];
 
-// AUTO % CALCULATION
 function updateCategoryStats() {
-  const solved = { web:0, misc:0, crypto:0, pwn:0, forensics:0, rev:0 };
-  challenges.forEach(c => solved[c.type] ? solved[c.type]++ : null);
+  const total_solved = challenges.length;
 
   fetch('totals.json')
     .then(r => r.json())
     .then(totals => {
-      Object.keys(solved).forEach(type => {
-        const total = totals[type] || 0;
-        const percent = total > 0 ? Math.round((solved[type] / total) * 100) : 0;
-        const circle = document.getElementById(`circle-${type}`);
-        const text = document.getElementById(`text-${type}`);
-        if (circle && text) {
-          circle.style.strokeDasharray = `${percent} 100`;
-          text.textContent = `${percent}%`;
-        }
-      });
+      const total_challenges = Object.values(totals).reduce((sum, val) => sum + val, 0);
+      const percent = total_challenges > 0 ? Math.round((total_solved / total_challenges) * 100) : 0;
+      const circle = document.getElementById('circle-overall');
+      const text = document.getElementById('text-overall');
+      if (circle && text) {
+        circle.style.strokeDashoffset = 100 - percent;
+        text.textContent = `${percent}%`;
+      }
     })
     .catch(() => {
-      Object.keys(solved).forEach(type => {
-        const el = document.getElementById(`text-${type}`);
-        if (el) el.textContent = solved[type] > 0 ? solved[type] : '0';
-      });
+      const text = document.getElementById('text-overall');
+      if (text) text.textContent = total_solved > 0 ? total_solved : '0';
+      const circle = document.getElementById('circle-overall');
+      if (circle) circle.style.strokeDashoffset = 100;
     });
 
   document.getElementById("solveCounter").textContent = `${challenges.length} SOLVED`;
