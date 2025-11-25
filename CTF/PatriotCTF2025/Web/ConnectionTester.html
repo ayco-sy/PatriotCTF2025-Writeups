@@ -75,14 +75,22 @@
     }
     .light code { background: rgba(30,110,254,0.15); }
 
+    /* IMAGES - Hover + Cursor */
     img {
       max-width: 100%;
       border-radius: 16px;
       margin: 35px 0;
       box-shadow: 0 20px 60px rgba(0,0,0,0.6);
       border: 2px solid rgba(88,166,255,0.3);
+      cursor: zoom-in !important;
+      transition: all 0.4s ease;
+      user-select: none;
     }
     .light img { box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+    img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 25px 80px rgba(88,166,255,0.6);
+    }
 
     .flag {
       background: rgba(0,255,0,0.1);
