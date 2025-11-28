@@ -79,30 +79,36 @@
       <a href="https://www.linkedin.com/in/ibrahim-mahmoud-15905a340/" target="_blank">Linked-in</a>
     </div>
 
-    <!-- VISITOR COUNTER - OFFICIAL LIBRARY VERSION (WORKS PERFECTLY) -->
+    <!-- VISITOR COUNTER - FIXED LIBRARY VERSION (Correct Constructor) -->
     <div class="visitor-counter">
       <span id="visitorCount" class="visitor-text">Loading...</span> visitors
     </div>
 
-    <!-- Load the official CounterAPI library -->
-    <script src="https://unpkg.com/counterapi@latest/counterapi.min.js"></script>
+    <!-- Load the official CounterAPI library (Correct CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
     <script>
-      // Initialize with your token for V2 (your workspace)
-      const counter = new window.CounterAPI({
-        workspace: 'shiraoris-team-1851',
-        accessToken: 'ut_HzUVGGynHOCPzSeJ4mZyAWUJtTLKWJkU0MxmVWtd',
-        version: 'v2'  // Use V2 for token support
-      });
+      // Wait for library to load, then initialize with correct constructor: new Counter(...)
+      window.addEventListener('load', async () => {
+        if (typeof window.Counter === 'undefined') {
+          document.getElementById("visitorCount").textContent = "∞";
+          return;
+        }
 
-      // Increment and display
-      counter.up('first-counter-1851').then(result => {
-        const count = result.data.up_count;
-        const el = document.getElementById("visitorCount");
-        el.textContent = count.toLocaleString();
-        if (count % 1000 === 0 && count > 0) el.classList.add("celebrate");
-      }).catch(err => {
-        console.error('Counter error:', err);
-        document.getElementById("visitorCount").textContent = "∞";
+        const counter = new window.Counter({
+          workspace: 'shiraoris-team-1851',
+          accessToken: 'ut_HzUVGGynHOCPzSeJ4mZyAWUJtTLKWJkU0MxmVWtd'
+        });
+
+        try {
+          const result = await counter.up('first-counter-1851');
+          const count = result.value;
+          const el = document.getElementById("visitorCount");
+          el.textContent = count.toLocaleString();
+          if (count % 1000 === 0 && count > 0) el.classList.add("celebrate");
+        } catch (err) {
+          console.error('Counter error:', err);
+          document.getElementById("visitorCount").textContent = "∞";
+        }
       });
     </script>
   </aside>
