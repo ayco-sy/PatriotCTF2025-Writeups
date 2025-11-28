@@ -18,14 +18,14 @@
       0%, 100% { filter: drop-shadow(0 0 6px #0f0); transform: scale(1); }
       50% { filter: drop-shadow(0 0 30px #39ff14); transform: scale(1.15); }
     }
-    .visitor-badge, .visitor-text {
+    .visitor-badge {
       height: 24px;
       border-radius: 6px;
       filter: drop-shadow(0 0 6px #0f0);
       transition: all 0.4s ease;
       vertical-align: middle;
     }
-    .visitor-badge.celebrate, .visitor-text.celebrate {
+    .visitor-badge.celebrate {
       animation: celebration 3s ease-in-out;
     }
     .visitor-fallback {
@@ -91,14 +91,13 @@
       <a href="https://www.linkedin.com/in/ibrahim-mahmoud-15905a340/" target="_blank">Linked-in</a>
     </div>
 
-    <!-- VISITOR COUNTER -->
+    <!-- VISITOR COUNTER - FIXED WITH WORKING SERVICE (glitch.me, 2025 ACTIVE) -->
     <div class="visitor-counter">
       <span id="visitorCount">
-        <img src="https://visitor-counter-badge.vercel.app/api/syndro-1/syndro?label=visitors&color=0f0&labelColor=13171e" 
+        <img src="https://visitor-badge.glitch.me/badge?page_id=syndro-ctf-writeups-visitors-v3&left_color=grey&right_color=brightgreen&style=flat" 
              alt="Visitors"
              class="visitor-badge"
-             loading="lazy"
-             onerror="this.style.display='none'; document.getElementById('visitorCount').textContent='∞';">
+             loading="lazy">
       </span>
       visitors
     </div>
