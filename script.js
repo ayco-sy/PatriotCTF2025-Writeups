@@ -184,15 +184,16 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
 
 // VISITOR COUNTER 
 (function() {
-  const key = 'syndro-ctf-writeups-visitors-v3';
-  fetch(`https://api.countapi.xyz/hit/${key}`)
-    .then(res => res.json())
+  const key = 'syndro-portfolio-visitors';  
+  
+  fetch(`https://api.simplehitcounter.com/hit/${key}`)
+    .then(r => r.json())
     .then(data => {
-      const count = data.value;
+      const count = data.count;
       document.getElementById('visitorCount').textContent = count.toLocaleString();
-      
-      // Little celebration on 1000+ visits
-      if (count % 1000 === 0) {
+
+      // Your celebration on every 1000th visit
+      if (count % 1000 === 0 && count > 0) {
         document.getElementById('visitorCount').style.animation = 'celebration 2s';
       }
     })
