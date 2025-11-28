@@ -191,6 +191,28 @@ async function updateVisitorCount() {
 }
 updateVisitorCount();
 
+async function updateVisitorCount() {
+  const countElement = document.getElementById('visitorCount');
+
+  try {
+    const counter = new Counter({
+      workspace: 'syndro',
+    });
+
+    const result = await counter.up('visitors'); 
+    countElement.textContent = result.value.toLocaleString();
+
+    if (result.value % 1000 === 0 && result.value > 0) {
+      countElement.classList.add('celebrate');
+    }
+  } catch (err) {
+    console.error("CounterAPI failed:", err);
+    countElement.innerHTML = '<span style="color:#39ff14">∞</span>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateVisitorCount);
+
 // LIVE CLOCK
 function updateClock() {
   const now = new Date();
