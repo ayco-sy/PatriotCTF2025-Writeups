@@ -180,6 +180,16 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
   });
 });
 
+async function updateVisitorCount() {
+  const counter = new Counter({ workspace: 'your-workspace' }); // From dashboard
+  try {
+    const result = await counter.up('visitors'); // Increments on load
+    document.getElementById('visitorCount').textContent = result.value.toLocaleString();
+  } catch (error) {
+    document.getElementById('visitorCount').textContent = '∞';
+  }
+}
+updateVisitorCount();
 
 // LIVE CLOCK
 function updateClock() {
