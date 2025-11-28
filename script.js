@@ -181,7 +181,7 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
 });
 
 async function updateVisitorCount() {
-  const counter = new Counter({ workspace: 'your-workspace' }); // From dashboard
+  const counter = new Counter({ workspace: 'syndro' }); // From dashboard
   try {
     const result = await counter.up('visitors'); // Increments on load
     document.getElementById('visitorCount').textContent = result.value.toLocaleString();
