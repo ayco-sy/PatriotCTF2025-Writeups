@@ -6,40 +6,83 @@
   <title>syndro | CTF Writeups</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
   <script>
     if (localStorage.theme === "light" || (!localStorage.theme && window.matchMedia("(prefers-color-scheme: light)").matches)) {
       document.documentElement.classList.add("light");
     }
   </script>
 
+  <!-- Visitor Counter Styles & Animation -->
   <style>
     @keyframes celebration {
       0%, 100% { filter: drop-shadow(0 0 6px #0f0); transform: scale(1); }
       50% { filter: drop-shadow(0 0 30px #39ff14); transform: scale(1.15); }
     }
-    .visitor-text {
+    .visitor-badge, .visitor-text {
+      height: 24px;
+      border-radius: 6px;
+      filter: drop-shadow(0 0 6px #0f0);
+      transition: all 0.4s ease;
+      vertical-align: middle;
+    }
+    .visitor-badge.celebrate, .visitor-text.celebrate {
+      animation: celebration 3s ease-in-out;
+    }
+    .visitor-fallback {
       font-family: 'Roboto Mono', monospace;
       color: #0f0;
       font-size: 18px;
-      font-weight: 700;
-      filter: drop-shadow(0 0 6px #0f0);
+      opacity: 0.9;
     }
-    .visitor-text.celebrate { animation: celebration 3s ease-in-out; }
   </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
   <div id="scanline-overlay"></div>
+
+  <!-- LIVE DIGITAL CLOCK -->
   <div id="liveClock"></div>
 
+  <!-- LEFT SIDEBAR -->
   <aside class="sidebar-left">
-    <!-- ... your existing sidebar content ... -->
     <div class="stats-card">
       <h3>Overall Progress</h3>
-      <!-- ... progress ring ... -->
+      <div class="overall-container">
+        <div class="progress-ring-big">
+          <svg viewBox="0 0 36 36">
+            <defs>
+              <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#58a6ff"/>
+                <stop offset="100%" stop-color="#8b5cf6"/>
+              </linearGradient>
+              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#39ff14"/>
+                <stop offset="100%" stop-color="#00ff9d"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#bgGradient)" opacity="0.25"/>
+            <path id="circle-overall" class="circle-progress" stroke="url(#progressGradient)" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#glow)"/>
+          </svg>
+          <span id="text-overall" class="circle-text-big">0%</span>
+        </div>
+
+        <div id="category-trails"></div>
+      </div>
+      <div class="solve-counter-sidebar" id="solveCounter">0 SOLVED</div>
     </div>
-    <div class="recent-solves"><h4>Recent Solves</h4><ul id="recentSolvesList"></ul></div>
+
+    <div class="recent-solves">
+      <h4>Recent Solves</h4>
+      <ul id="recentSolvesList"></ul>
+    </div>
+
     <div class="quick-links">
       <a href="https://github.com/syndro-1" target="_blank">GitHub</a>
       <a href="https://x.com/Syndro_1" target="_blank">X / Twitter</a>
@@ -48,45 +91,34 @@
       <a href="https://www.linkedin.com/in/ibrahim-mahmoud-15905a340/" target="_blank">Linked-in</a>
     </div>
 
-    <!-- FINAL WORKING COUNTER (no library, direct API call) -->
-    <div class="visitor-counter">
-      <span id="visitorCount" class="visitor-text">Loading...</span> visitors
-    </div>
-
-    <script>
-      // Direct, simple, working 100% in 2025 with your token
-      fetch("https://api.counterapi.dev/v2/shiraoris-team-1851/first-counter-1851/up", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer ut_HzUVGGynHOCPzSeJ4mZyAWUJtTLKWJkU0MxmVWtd",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ amount: 1 })
-      })
-      .then(r => r.json())
-      .then(data => {
-        const count = data.up_count || data.count || 0;
-        const el = document.getElementById("visitorCount");
-        el.textContent = Number(count).toLocaleString();
-        if (count % 1000 === 0 && count > 0) el.classList.add("celebrate");
-      })
-      .catch(() => {
-        document.getElementById("visitorCount").textContent = "∞";
-      });
-    </script>
+    <!-- VISITOR COUNTER -->
+<div class="visitor-counter">
+  <span id="visitorCount">
+    <img src="https://hits.gjbae1212.xyz/api/count/incr/badge.svg?url=https%3A%2F%2Fsyndro-1.github.io%2Fsyndro%2F&count_bg=%230F0&title_bg=%2313171e&icon=&icon_color=%230F0&title=visitors&edge_flat=false"
+         alt="Visitors"
+         class="visitor-badge"
+         loading="lazy"
+         onerror="this.style.display='none'; document.getElementById('visitorCount').textContent='∞';">
+  </span>
+  visitors
+</div>
   </aside>
 
-  <!-- Rest of your page (unchanged) -->
   <div class="container">
     <div class="toggle" id="themeToggle">Theme</div>
     <div class="ctf-toggle" id="ctfToggle">CTFs</div>
-    <header><h1 id="glitch">Syndro</h1></header>
+
+    <header>
+      <h1 id="glitch">Syndro</h1>
+    </header>
+
     <div class="terminal" id="terminal">
       <div>$ whoami</div>
       <div>Syndro, Never thought I'd fall in love with web</div>
       <div>$ cat bio.txt</div>
       <div class="typing">CTF player @0xL4ugh • Web lover?! • Student at AOU</div>
     </div>
+
     <div class="bio">
       <p>Tired most of the time.</p><br><br><br>
       <p>
@@ -116,13 +148,57 @@
     <footer>• syndro •</footer>
   </div>
 
+  <!-- CTF MODAL -->
   <div class="modal-overlay" id="ctfModal">
     <div class="modal-content">
-      <div class="modal-header"><h2>My CTFs</h2><div class="close-modal">×</div></div>
+      <div class="modal-header">
+        <h2>My CTFs</h2>
+        <div class="close-modal">×</div>
+      </div>
       <div class="ctf-grid" id="ctfGrid"></div>
     </div>
   </div>
 
   <script src="script.js"></script>
+
+  <!-- Visitor Counter Fallback JS (loads if badge fails) -->
+  <script>
+    let fallbackLoaded = false;
+    function initFallbackCounter() {
+      if (fallbackLoaded) return;
+      fallbackLoaded = true;
+      
+      const key = 'syndro-ctf-writeups-visitors-v3';
+      const container = document.getElementById('visitorCount');
+      
+      // Load countapi.xyz (reliable as of 2025)
+      fetch(`https://countapi.xyz/hit/${key}`)
+        .then(res => res.json())
+        .then(data => {
+          const count = data.value || 0;
+          const countEl = document.createElement('span');
+          countEl.className = 'visitor-text visitor-fallback';
+          countEl.textContent = count.toLocaleString();
+          container.innerHTML = ''; // Clear badge
+          container.appendChild(countEl);
+          
+          // Celebration on milestones
+          if (count % 1000 === 0 && count > 0) {
+            countEl.classList.add('celebrate');
+          }
+        })
+        .catch(() => {
+          container.innerHTML = '<span class="visitor-fallback">∞</span>'; // Ultimate fallback
+        });
+    }
+
+    // Rare celebration for badge too
+    document.addEventListener("DOMContentLoaded", () => {
+      const badge = document.querySelector(".visitor-badge");
+      if (badge && Math.random() < 0.01) {
+        badge.classList.add("celebrate");
+      }
+    });
+  </script>
 </body>
 </html>
