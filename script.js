@@ -181,7 +181,7 @@ async function updateVisitorCount() {
     countElement.textContent = count.toLocaleString();
     countElement.classList.add('visitor-text');
 
-    if (count % 1000 === 0 && count > 0) {
+    if (count % 20 === 0 && count > 0) {
       countElement.classList.add('celebrate');
     }
   } catch (err) {
