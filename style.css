@@ -227,3 +227,11 @@ footer{text-align:center;margin:100px 0 50px;opacity:0.6}
 @media (max-width: 600px) {
   #liveClock { top: 80px; right: 10px; font-size: 1.3rem; }
 }
+@keyframes celebration {
+  0%, 100% { filter: drop-shadow(0 0 4px #0f0); }
+  50% { filter: drop-shadow(0 0 20px #39ff14) brightness(1.5); transform: scale(1.1); }
+}
+@keyframes celebration {
+  0%, 100% { filter: drop-shadow(0 0 4px #0f0); }
+  50% { filter: drop-shadow(0 0 20px #39ff14) brightness(1.5); transform: scale(1.1); }
+}
