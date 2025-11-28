@@ -31,8 +31,11 @@ if (canvas) {
 
 // Challenges
 const challenges = [
+  // Misc
   {title:"Reverse Metadata Part 1", file:"CTF/PatriotCTF2025/Misc/ReverseMetaData1", flag:"MASONCC{images_****}", type:"misc"},
   {title:"Reverse Metadata Part 2", file:"CTF/PatriotCTF2025/Misc/ReverseMetaData2", flag:"PCTF{hidden_****}", type:"misc"},
+
+  // web
   {title:"Connection Tester", file:"CTF/PatriotCTF2025/Web/ConnectionTester", flag:"PCTF{C0nnection_****}", type:"web"},
   {title:"Feedback Fallout", file:"CTF/PatriotCTF2025/Web/FeedbackFallout", flag:"PCTF{SQLI_****}", type:"web"},
   {title:"Secure Auth", file:"CTF/PatriotCTF2025/Web/SecureAuth", flag:"PCTF{cant_****}", type:"web"},
@@ -40,10 +43,12 @@ const challenges = [
   {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault", flag:"FLAG{py7h0n_****}", type:"web"},
 ];
 
-// MAIN PROGRESS + NEON TRAILS
+// MAIN PROGRESS + COLORED BACKGROUND + NEON TRAILS
 function updateCategoryStats() {
   const solved = { web:0, misc:0, crypto:0, pwn:0, forensics:0, rev:0 };
-  challenges.forEach(c => solved[c.type] && solved[c.type]++);
+  challenges.forEach(c => {
+    if (solved.hasOwnProperty(c.type)) solved[c.type]++;
+  });
 
   const totalSolved = challenges.length;
 
@@ -53,21 +58,37 @@ function updateCategoryStats() {
       const totalChallenges = Object.values(totals).reduce((a,b) => a + b, 0);
       const percent = totalChallenges > 0 ? Math.round((totalSolved / totalChallenges) * 100) : 0;
 
+      // Update progress
       const circle = document.getElementById('circle-overall');
       const text = document.getElementById('text-overall');
+      const bgCircle = document.querySelector('.circle-bg-dynamic');
+
       if (circle) circle.style.strokeDashoffset = 100 - percent;
       if (text) text.textContent = `${percent}%`;
 
+      // Color the background circle based on progress
+      if (bgCircle) {
+        if (percent >= 80) bgCircle.style.stroke = '#39ff14';
+        else if (percent >= 60) bgCircle.style.stroke = '#00ff9d';
+        else if (percent >= 40) bgCircle.style.stroke = '#00d0ff';
+        else if (percent >= 20) bgCircle.style.stroke = '#ffa500';
+        else bgCircle.style.stroke = '#ff2e63';
+        bgCircle.style.opacity = 0.25 + (percent / 200);
+      }
+
+      // Trails
       const container = document.getElementById('category-trails');
       container.innerHTML = '';
+
       const cats = [
-        {type:'web', label:'WEB', angle:60},
-        {type:'misc', label:'MISC', angle:130},
-        {type:'crypto', label:'CRYPTO', angle:180},
-        {type:'pwn', label:'PWN', angle:230},
+        {type:'web',       label:'WEB',       angle:60},
+        {type:'misc',      label:'MISC',      angle:130},
+        {type:'crypto',    label:'CRYPTO',    angle:180},
+        {type:'pwn',       label:'PWN',       angle:230},
         {type:'forensics', label:'FORENSICS', angle:290},
-        {type:'rev', label:'REV', angle:340}
+        {type:'rev',       label:'REV',       angle:340}
       ];
+
       cats.forEach((cat, i) => {
         if (solved[cat.type] > 0) {
           setTimeout(() => {
@@ -149,7 +170,7 @@ renderChallenges();
 updateCategoryStats();
 populateRecentSolves();
 
-// SEARCH
+// SEARCH FUNCTIONALITY
 document.getElementById('searchBar')?.addEventListener('input', function(e) {
   const term = e.target.value.toLowerCase();
   document.querySelectorAll('.card').forEach(card => {
@@ -159,25 +180,11 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
   });
 });
 
-// FINAL WORKING VISITOR COUNTER (2025 - PERFECT FOR YOUR SITE)
+// Rare celebration for visitor badge (~every 100th visit)
 document.addEventListener("DOMContentLoaded", () => {
-  const counterContainer = document.getElementById("visitorCount");
-  if (!counterContainer) return;
-
-  // THIS IS YOUR CORRECT URL
-  const siteUrl = encodeURIComponent("https://syndro-1.github.io/syndro/");
-
-  counterContainer.innerHTML = `
-    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=${siteUrl}&count_bg=%230F0&title_bg=%2313171e&icon=&icon_color=%230F0&title=visitors&edge_flat=false"
-         alt="Visitors"
-         style="height: 22px; vertical-align: middle; filter: drop-shadow(0 0 6px #0f0); border-radius: 6px;"
-         loading="lazy">
-  `;
-
-  // Celebration glow every ~100th visitor
-  if (Math.random() < 0.01) {
-    const img = counterContainer.querySelector("img");
-    img.style.animation = "celebration 3s ease-in-out";
+  const badge = document.querySelector(".visitor-badge");
+  if (badge && Math.random() < 0.01) {
+    badge.classList.add("celebrate");
   }
 });
 
