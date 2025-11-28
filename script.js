@@ -37,7 +37,7 @@ const challenges = [
 
   // web
   {title:"Connection Tester", file:"CTF/PatriotCTF2025/Web/ConnectionTester", flag:"PCTF{C0nnection_****}", type:"web"},
-  {title:"Feedback Fallout", file="CTF/PatriotCTF2025/Web/FeedbackFallout", flag:"PCTF{SQLI_****}", type:"web"},
+  {title:"Feedback Fallout", file:"CTF/PatriotCTF2025/Web/FeedbackFallout", flag:"PCTF{SQLI_****}", type:"web"},
   {title:"Secure Auth", file:"CTF/PatriotCTF2025/Web/SecureAuth", flag:"PCTF{cant_****}", type:"web"},
   {title:"Trust Fall", file:"CTF/PatriotCTF2025/Web/TrustFall", flag:"PCTF{auth_****}", type:"web"},
   {title:"Trust Vault", file:"CTF/PatriotCTF2025/Web/TrustVault", flag:"FLAG{py7h0n_****}", type:"web"},
@@ -180,7 +180,7 @@ document.getElementById('searchBar')?.addEventListener('input', function(e) {
   });
 });
 
-// Rare celebration for badge (~every 100th visit)
+// Rare celebration for visitor badge (~every 100th visit)
 document.addEventListener("DOMContentLoaded", () => {
   const badge = document.querySelector(".visitor-badge");
   if (badge && Math.random() < 0.01) {
